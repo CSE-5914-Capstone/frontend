@@ -1,8 +1,9 @@
 import logo from './logo.svg';
 import './App.css';
 import Container from "@material-ui/core/Container"
-import { IconButton, InputBase, Paper } from '@material-ui/core';
+import { IconButton, InputBase, Paper, Button } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search'
+import RequestButton from './components/requestButton';
 
 function App() {
   return (
@@ -31,6 +32,10 @@ function App() {
           <SearchIcon />
         </IconButton>
       </Paper>
+      <div>
+        <Button variant="outlined">Joe's Button</Button>
+      </div>
+      <RequestButton/>
     </Container>
   );
 }

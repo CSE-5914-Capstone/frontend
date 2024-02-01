@@ -1,0 +1,9 @@
+.input {
+  width: 90%;
+  padding: 0.5vw;
+}
+.icon {
+  display: flex;
+  justify-content: center;
+  width: 10%;
+}

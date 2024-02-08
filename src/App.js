@@ -1,8 +1,15 @@
 import './App.css';
-import SearchBar from './components/SearchBar'
-import { Box, Container, Typography } from '@material-ui/core';
+// import SearchBar from './components/SearchBar'
+import { Box, Container, InputBase, Paper, Typography, IconButton } from '@material-ui/core';
+import SearchBar from "material-ui-search-bar"
+import SearchIcon from "@material-ui/icons/Search"
 
 function App() {
+  
+  const onSearch = (search: String) => {
+    console.log(search)
+  }
+  
   return (
     <Container className='app-container'>
       <Container className='center-text'>
@@ -11,10 +18,16 @@ function App() {
         </Typography>
       </Container>
       <Container>
-        <SearchBar />
+        <SearchBar
+        onChange={() => console.log('onChange')}
+        onRequestSearch={(searchTerm) => onSearch(searchTerm)}
+      />
       </Container>
+      
     </Container>
   );
 }
 
 export default App;
+
+

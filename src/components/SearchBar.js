@@ -6,7 +6,7 @@ import './SearchBar.css'
   // Height increases when deleting last character from search bar
 function SearchBar() {
   return (
-    <Paper component="form">
+    <Paper component="form" className="form">
       <InputBase 
         className='input'
         placeholder='Search'

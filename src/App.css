@@ -6,3 +6,26 @@
 .center-text {
   text-align: center;
 }
+/* .search-bar-container {
+  max-height: 49px;
+  width: 100%; 
+} */
+
+.root {
+  padding: '2px 4px';
+  display: 'flex' !important;
+  align-items: 'center';
+  justify-content: center;
+  width: 400;
+  height: 49px;
+}
+.input {
+  margin-left: 1%;
+  max-height: 49px;
+  display: flex !important;
+  align-items: center !important;
+  /* flex: 1; */
+  /* > div {
+    display: flex;
+  } */
+}

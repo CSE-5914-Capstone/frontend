@@ -1,9 +1,16 @@
-.input {
-  width: 90%;
+/* .input {
+  flex: 1; 
+  width: 80%;
   padding: 0.5vw;
-}
-.icon {
-  display: flex;
-  justify-content: center;
+} */
+/* .icon {
+  flex: 1;
+  display: flex !important;
+  justify-content: center !important;
   width: 10%;
-}
+  max-height: 49px;
+} */
+/* .form {
+  max-height: 49px;
+  flex: 1;
+} */

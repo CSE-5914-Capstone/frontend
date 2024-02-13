@@ -28,4 +28,17 @@
   /* > div {
     display: flex;
   } */
+}/* App.css */
+.app {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.song-card {
+  border: 1px solid #ccc;
+  padding: 20px;
+  text-align: center;
+  max-width: 300px;
 }

@@ -1,7 +1,10 @@
+import './App.css';
+// import SearchBar from './components/SearchBar'
+import { Box, Container, InputBase, Paper, Typography, IconButton, TextField, Grid } from '@material-ui/core';
+import SearchBar from "material-ui-search-bar"
+import SearchIcon from "@material-ui/icons/Search"
+import axios from 'axios'
 import React, { useState } from 'react';
-import Container from '@material-ui/core/Container';
-import { IconButton, InputBase, Typography, TextField, Grid, Paper } from '@material-ui/core';
-import SearchIcon from '@material-ui/icons/Search';
 import SongCard from './SongCard';
 
 function generateRandomSong() {
@@ -31,12 +34,8 @@ function App() {
   const [numSongs, setNumSongs] = useState(5); // Default number of songs to display
   const [songs, setSongs] = useState(Array.from({ length: numSongs }, generateRandomSong));
   const [songColors, setSongColors] = useState(Array.from({ length: numSongs }, () => getRandomColor()));
-
-  const handleSearch = (event) => {
-    // Prevent the default form submission behavior
-    event.preventDefault();
-  };
-
+  const [searchValue, setSearchValue] = useState("")
+  
   const handleNumSongsChange = (event) => {
     // Update the number of songs to display
     const newNumSongs = parseInt(event.target.value, 10);
@@ -61,43 +60,71 @@ function App() {
     setSongs(newSongs);
     setSongColors(newSongColors);
   };
+  
+  const onSearch = (search) => {
+    console.log(search)
+    let result = {}
+    axios.get("http://localhost:3000/playlist-from-song").then((response) => {
+      console.log(response.data)
+      let data = response.data
+      data.map((song) => {
+        if (song["track_name"].toLowerCase().includes(search.toLowerCase())) {
+          result = song
+        }
+      })
+      console.log(result)
+      setSearchValue("")
+      return result
+    })
+  }
 
+  const onChange = (change) => {
+    console.log("onChange")
+    setSearchValue(change)
+  }
+  
   return (
-    <Container>
-      <Paper component="form" onSubmit={handleSearch}>
-        <InputBase placeholder="Search" />
-        <IconButton type="submit" aria-label="search">
-          <SearchIcon />
-        </IconButton>
-      </Paper>
-
-      {/* Title for the number of songs */}
-      <Typography variant="h4" gutterBottom>
-        Number of Songs: {numSongs}
-      </Typography>
-
-      {/* Larger input field for the number of songs */}
-      <TextField
-        type="number"
-        value={numSongs}
-        onChange={handleNumSongsChange}
-        variant="outlined"
-        fullWidth
-        margin="normal"
-        inputProps={{ style: { fontSize: 20, textAlign: 'center' } }}
-      />
-
-      {/* Display multiple SongCard components in a grid layout */}
-      <Grid container spacing={2}>
-        {songs.map((song, index) => (
-          <Grid item xs={12} sm={6} md={4} key={index}>
-            <SongCard
-              song={song}
-              cardStyle={{ backgroundColor: songColors[index] }}
-            />
-          </Grid>
-        ))}
-      </Grid>
+    <Container className='app-container'>
+      <Container className='center-text'>
+        <Typography variant='h3'>
+          Melody Miners
+        </Typography>
+      </Container>
+      <Container>
+        <SearchBar
+          value={searchValue}
+          onChange={(change) => onChange(change)}
+          onRequestSearch={(searchTerm) => onSearch(searchTerm)}
+        />
+      </Container>
+      <Container>
+        <Typography variant="h4" gutterBottom>
+          Number of Songs: {numSongs}
+        </Typography>
+      </Container>
+      <Container>
+        <TextField
+          type="number"
+          value={numSongs}
+          onChange={handleNumSongsChange}
+          variant="outlined"
+          fullWidth
+          margin="normal"
+          inputProps={{ style: { fontSize: 20, textAlign: 'center' } }}
+        />
+      </Container>
+      <Container>
+        <Grid container spacing={2}>
+          {songs.map((song, index) => (
+            <Grid item xs={12} sm={6} md={4} key={index}>
+              <SongCard
+                song={song}
+                cardStyle={{ backgroundColor: songColors[index] }}
+              />
+            </Grid>
+          ))}
+        </Grid>
+      </Container>      
     </Container>
   );
 }

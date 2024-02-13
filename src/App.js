@@ -72,6 +72,13 @@ function App() {
           result = song
         }
       })
+      setSongs([{
+        name: result["track_name"],
+        artist: result["track_artist"],
+        genre: result["playlist_genre"],
+        bpm: result["tempo"]
+      }])
+      
       console.log(result)
       setSearchValue("")
       return result

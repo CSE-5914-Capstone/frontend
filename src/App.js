@@ -8,7 +8,7 @@ import { useState } from 'react';
 
 function App() {
   
-  const [searchValue, setSearchValue] = useState("Test")
+  const [searchValue, setSearchValue] = useState("")
   
   const onSearch = (search) => {
     console.log(search)

@@ -1,8 +1,6 @@
 import './App.css';
-// import SearchBar from './components/SearchBar'
-import { Box, Container, InputBase, Paper, Typography, IconButton, TextField, Grid } from '@material-ui/core';
+import { Container, Typography, TextField, Grid } from '@material-ui/core';
 import SearchBar from "material-ui-search-bar"
-import SearchIcon from "@material-ui/icons/Search"
 import axios from 'axios'
 import React, { useState } from 'react';
 import SongCard from './SongCard';
@@ -31,7 +29,7 @@ function getRandomColor() {
 }
 
 function App() {
-  const [numSongs, setNumSongs] = useState(5); // Default number of songs to display
+  const [numSongs, setNumSongs] = useState(1); // Default number of songs to display
   const [songs, setSongs] = useState(Array.from({ length: numSongs }, generateRandomSong));
   const [songColors, setSongColors] = useState(Array.from({ length: numSongs }, () => getRandomColor()));
   const [searchValue, setSearchValue] = useState("")
@@ -110,7 +108,9 @@ function App() {
         </Typography>
       </Container>
       <Container>
+        {/** Disabled b/c currently breaking app w/ search functionality */}
         <TextField
+          disabled={true}
           type="number"
           value={numSongs}
           onChange={handleNumSongsChange}

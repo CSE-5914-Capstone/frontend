@@ -7,8 +7,8 @@ export default class RequestText extends React.Component {
     }
   
     componentDidMount() {
-      axios.get(`http://localhost:3000/playlist-from-song`)
-        .then(res => {
+      axios.get(`http://127.0.0.1:5000/query`)
+      .then(res => {
           const songs = res.data;
           this.setState({ songs });
         })
@@ -16,14 +16,7 @@ export default class RequestText extends React.Component {
   
     render() {
       return (
-        <ul>
-          {
-            this.state.songs
-              .map(song =>
-                <li key={song.track_id}>{song.track_name}</li>
-              )
-          }
-        </ul>
+        <p>{JSON.stringify(this.state)}</p>
       )
     }
   }

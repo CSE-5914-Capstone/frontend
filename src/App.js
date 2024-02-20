@@ -12,10 +12,16 @@ const useStyles = makeStyles((theme) => ({
     textAlign: 'center',
     marginBottom: theme.spacing(3),
   },
+  searchBar: {
+    border: '2px solid black',
+    borderRadius: theme.spacing(1),
+  },
   searchBarContainer: {
     marginBottom: theme.spacing(3),
+    textAlign: 'center', // Center the search bar
   },
   songCount: {
+    textAlign: 'center', // Center the text
     marginBottom: theme.spacing(2),
   },
   songCardContainer: {
@@ -100,6 +106,7 @@ function App() {
       </div>
       <div className={classes.searchBarContainer}>
         <SearchBar
+          className={classes.searchBar}
           value={searchValue}
           onChange={(change) => onChange(change)}
           onRequestSearch={(searchTerm) => onSearch(searchTerm)}

@@ -1,4 +1,9 @@
-function SearchSongs() {
+import { React, useState } from 'react'
+import { Container } from '@material-ui/core'
+import SearchBar from "material-ui-search-bar"
+import axios from 'axios'
+
+function SearchSongs({setSongs}) {
   const [searchValue, setSearchValue] = useState("")
   
   const onSearch = (search) => {

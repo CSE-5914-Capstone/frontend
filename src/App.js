@@ -1,70 +1,91 @@
-import './App.css';
-import { Container, Typography, TextField, Grid, AppBar, Tabs, Tab, TabPane } from '@material-ui/core';
-import SearchBar from "material-ui-search-bar"
-import axios from 'axios'
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { Container, Typography, Grid, makeStyles, Paper, AppBar, Tabs, Tab } from '@material-ui/core';
+import SearchBar from "material-ui-search-bar";
+import axios from 'axios';
 
 import SearchSongs from './components/SearchSongs';
 import SongCard from './SongCard';
 
-function generateRandomSong() {
-  // Function to generate a random song
-  const genres = ['Pop', 'Rock', 'Electronic', 'Hip-Hop', 'Country'];
-  const bpm = Math.floor(Math.random() * (180 - 80 + 1) + 80); // Random BPM between 80 and 180
-
-  return {
-    name: `Random Song ${Math.floor(Math.random() * 1000)}`,
-    artist: `Random Artist ${Math.floor(Math.random() * 1000)}`,
-    genre: genres[Math.floor(Math.random() * genres.length)],
-    bpm,
-  };
-}
+const useStyles = makeStyles((theme) => ({
+  appContainer: {
+    padding: theme.spacing(4),
+  },
+  centerText: {
+    textAlign: 'center',
+    marginBottom: theme.spacing(3),
+  },
+  searchBar: {
+    border: '2px solid black',
+    borderRadius: theme.spacing(1),
+  },
+  searchBarContainer: {
+    marginBottom: theme.spacing(3),
+    textAlign: 'center', // Center the search bar
+  },
+  songCount: {
+    textAlign: 'center', // Center the text
+    marginBottom: theme.spacing(2),
+  },
+  songCardContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+  },
+  songCard: {
+    width: 300,
+    height: 400,
+    margin: theme.spacing(2),
+    padding: theme.spacing(2),
+    marginBottom: 0,
+    marginRight: 0,
+    border: '4px solid black',
+    borderRadius: theme.spacing(1),
+    boxShadow: '8px 8px 8px rgba(0, 0, 0, 0.1), -8px -8px 8px rgba(0, 0, 0, 0.1)',
+  },
+}));
 
 function getRandomColor() {
-  // Function to generate a random color
-  const letters = '0123456789ABCDEF';
-  let color = '#';
-  for (let i = 0; i < 6; i++) {
-    color += letters[Math.floor(Math.random() * 16)];
-  }
-  return color;
+  return "#" + Math.floor(Math.random()*16777215).toString(16);
 }
 
 function App() {
-  const [numSongs, setNumSongs] = useState(1); // Default number of songs to display
-  const [songs, setSongs] = useState(Array.from({ length: numSongs }, generateRandomSong));
-  const [songColors, setSongColors] = useState(Array.from({ length: numSongs }, () => getRandomColor()));
-  const [searchValue, setSearchValue] = useState("")
+  const classes = useStyles();
+  const [songs, setSongs] = useState([]);
+  const [originalColors, setOriginalColors] = useState([]);
+  const [searchValue, setSearchValue] = useState("");
   const [currentTab, setCurrentTab] = useState(0)
-  
-  const handleNumSongsChange = (event) => {
-    // Update the number of songs to display
-    const newNumSongs = parseInt(event.target.value, 10);
-    setNumSongs(newNumSongs);
 
-    // Generate a new list of random songs and colors based on the updated number
-    const newSongs = Array.from({ length: newNumSongs }, (_, index) => {
-      if (index < numSongs) {
-        return songs[index]; // Keep existing songs unchanged
-      } else {
-        return generateRandomSong(); // Generate new songs for added slots
-      }
-    });
-    const newSongColors = Array.from({ length: newNumSongs }, (_, index) => {
-      if (index < numSongs) {
-        return songColors[index]; // Keep existing colors unchanged
-      } else {
-        return getRandomColor(); // Generate new colors for added slots
-      }
-    });
+  useEffect(() => {
+    fetchData();
+  }, []); 
 
-    setSongs(newSongs);
-    setSongColors(newSongColors);
+  const fetchData = () => {
+    axios.get("http://localhost:3000/playlist-from-song")
+      .then((response) => {
+        let data = response.data;
+        let searchResults = [];
+
+        if (Array.isArray(data)) {
+          data.forEach((song) => {
+            searchResults.push({
+              name: song["track_name"],
+              artist: song["track_artist"],
+              genre: song["playlist_genre"],
+              bpm: Math.round(song["tempo"]),
+            });
+          });
+        }
+
+        setSongs(searchResults);
+        setOriginalColors(Array(searchResults.length).fill().map(getRandomColor));
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
   };
   
   return (
-    <Container className='app-container'>
-      <Container className='center-text'>
+    <Container className={classes.appContainer}>
+      <Container className={classes.centerText}>
         <Typography variant='h3'>
           Melody Miners
         </Typography>
@@ -79,34 +100,22 @@ function App() {
       <SearchSongs setSongs={setSongs} />
       <Container>
         <Typography variant="h4" gutterBottom>
-          Number of Songs: {numSongs}
+          Number of Songs: {songs.length}
         </Typography>
       </Container>
-      <Container>
-        {/** Disabled b/c currently breaking app w/ search functionality */}
-        <TextField
-          disabled={true}
-          type="number"
-          value={numSongs}
-          onChange={handleNumSongsChange}
-          variant="outlined"
-          fullWidth
-          margin="normal"
-          inputProps={{ style: { fontSize: 20, textAlign: 'center' } }}
-        />
-      </Container>
-      <Container>
-        <Grid container spacing={2}>
+      <div className={classes.songCardContainer}>
+        <Grid container spacing={4}>
           {songs.map((song, index) => (
             <Grid item xs={12} sm={6} md={4} key={index}>
-              <SongCard
-                song={song}
-                cardStyle={{ backgroundColor: songColors[index] }}
-              />
+              <Paper className={classes.songCard} style={{ backgroundColor: originalColors[index] }}>
+                <SongCard
+                  song={song}
+                />
+              </Paper>
             </Grid>
           ))}
         </Grid>
-      </Container>      
+      </div>
     </Container>
   );
 }

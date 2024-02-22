@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Typography, Grid, makeStyles, Paper, AppBar, Tabs, Tab } from '@material-ui/core';
-import SearchBar from "material-ui-search-bar";
 import axios from 'axios';
 
 import SearchSongs from './components/SearchSongs';
-import SongCard from './SongCard';
+import SongsList from './components/SongsList';
 
 const useStyles = makeStyles((theme) => ({
   appContainer: {
@@ -25,22 +24,7 @@ const useStyles = makeStyles((theme) => ({
   songCount: {
     textAlign: 'center', // Center the text
     marginBottom: theme.spacing(2),
-  },
-  songCardContainer: {
-    display: 'flex',
-    justifyContent: 'center',
-  },
-  songCard: {
-    width: 300,
-    height: 400,
-    margin: theme.spacing(2),
-    padding: theme.spacing(2),
-    marginBottom: 0,
-    marginRight: 0,
-    border: '4px solid black',
-    borderRadius: theme.spacing(1),
-    boxShadow: '8px 8px 8px rgba(0, 0, 0, 0.1), -8px -8px 8px rgba(0, 0, 0, 0.1)',
-  },
+  }
 }));
 
 function getRandomColor() {
@@ -98,24 +82,12 @@ function App() {
       </AppBar>
       {/** TODO Put actual components/screens so tabs change the view */}
       <SearchSongs setSongs={setSongs} />
-      <Container>
+      <SongsList songs={songs} colors={originalColors} />
+      {/* <Container>
         <Typography variant="h4" gutterBottom>
           Number of Songs: {songs.length}
         </Typography>
-      </Container>
-      <div className={classes.songCardContainer}>
-        <Grid container spacing={4}>
-          {songs.map((song, index) => (
-            <Grid item xs={12} sm={6} md={4} key={index}>
-              <Paper className={classes.songCard} style={{ backgroundColor: originalColors[index] }}>
-                <SongCard
-                  song={song}
-                />
-              </Paper>
-            </Grid>
-          ))}
-        </Grid>
-      </div>
+      </Container> */}
     </Container>
   );
 }

@@ -1,5 +1,5 @@
 import './App.css';
-import { Container, Typography, TextField, Grid } from '@material-ui/core';
+import { Container, Typography, TextField, Grid, AppBar, Tabs, Tab, TabPane } from '@material-ui/core';
 import SearchBar from "material-ui-search-bar"
 import axios from 'axios'
 import React, { useState } from 'react';
@@ -33,6 +33,7 @@ function App() {
   const [songs, setSongs] = useState(Array.from({ length: numSongs }, generateRandomSong));
   const [songColors, setSongColors] = useState(Array.from({ length: numSongs }, () => getRandomColor()));
   const [searchValue, setSearchValue] = useState("")
+  const [currentTab, setCurrentTab] = useState(0)
   
   const handleNumSongsChange = (event) => {
     // Update the number of songs to display
@@ -95,6 +96,14 @@ function App() {
           Melody Miners
         </Typography>
       </Container>
+      <AppBar position='static' color='default'>
+        <Tabs value={currentTab} onChange={(newTab) => setCurrentTab(newTab)}>
+          <Tab label='Search Songs' />
+          <Tab label='Create Playlist' />
+        </Tabs>
+      </AppBar>
+      {/** TODO Put actual components/screens so tabs change the view */}
+      
       <Container>
         <SearchBar
           value={searchValue}

@@ -1,55 +1,29 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Typography, Grid, makeStyles, Paper } from '@material-ui/core';
-import SearchBar from "material-ui-search-bar";
+import { Container, Typography, makeStyles, AppBar, Tabs, Tab } from '@material-ui/core';
 import axios from 'axios';
-import SongCard from './SongCard';
 
-const useStyles = makeStyles((theme) => ({
-  appContainer: {
-    padding: theme.spacing(4),
-  },
-  centerText: {
-    textAlign: 'center',
-    marginBottom: theme.spacing(3),
-  },
-  searchBar: {
-    border: '2px solid black',
-    borderRadius: theme.spacing(1),
-  },
-  searchBarContainer: {
-    marginBottom: theme.spacing(3),
-    textAlign: 'center', // Center the search bar
-  },
-  songCount: {
-    textAlign: 'center', // Center the text
-    marginBottom: theme.spacing(2),
-  },
-  songCardContainer: {
-    display: 'flex',
-    justifyContent: 'center',
-  },
-  songCard: {
-    width: 300,
-    height: 400,
-    margin: theme.spacing(2),
-    padding: theme.spacing(2),
-    marginBottom: 0,
-    marginRight: 0,
-    border: '4px solid black',
-    borderRadius: theme.spacing(1),
-    boxShadow: '8px 8px 8px rgba(0, 0, 0, 0.1), -8px -8px 8px rgba(0, 0, 0, 0.1)',
-  },
-}));
+import SearchSongs from './components/SearchSongs';
+import SongsList from './components/SongsList';
 
 function getRandomColor() {
   return "#" + Math.floor(Math.random()*16777215).toString(16);
+}
+
+function TabPanel({value, index, children}) {
+  return (
+    <Container role="tabpanel" hidden={value !== index} id={`tabpanel-${index}`}>
+      {value === index && (
+        children
+      )}
+    </Container>
+  )
 }
 
 function App() {
   const classes = useStyles();
   const [songs, setSongs] = useState([]);
   const [originalColors, setOriginalColors] = useState([]);
-  const [searchValue, setSearchValue] = useState("");
+  const [currentTab, setCurrentTab] = useState(0)
 
   useEffect(() => {
     fetchData();
@@ -80,58 +54,63 @@ function App() {
       });
   };
 
-  const onSearch = (search) => {
-    let searchResults = [];
-
-    songs.forEach((song, index) => {
-      if (song.name.toLowerCase().includes(search.toLowerCase())) {
-        searchResults.push(song);
-      }
-    });
-
-    setSongs(searchResults);
-    setSearchValue("");
-  };
-
-  const onChange = (change) => {
-    setSearchValue(change);
-  };
-
+  const onTabChange = (event, newTab) => {
+    setCurrentTab(newTab)
+  }
+  
   return (
     <Container className={classes.appContainer}>
-      <div className={classes.centerText}>
-        <Typography variant='h3'>
-          Melody Miners
-        </Typography>
-      </div>
-      <div className={classes.searchBarContainer}>
-        <SearchBar
-          className={classes.searchBar}
-          value={searchValue}
-          onChange={(change) => onChange(change)}
-          onRequestSearch={(searchTerm) => onSearch(searchTerm)}
-        />
-      </div>
-      <div className={classes.songCount}>
-        <Typography variant="h4" gutterBottom>
-          Number of Songs: {songs.length}
-        </Typography>
-      </div>
-      <div className={classes.songCardContainer}>
-        <Grid container spacing={4}>
-          {songs.map((song, index) => (
-            <Grid item xs={12} sm={6} md={4} key={index}>
-              <Paper className={classes.songCard} style={{ backgroundColor: originalColors[index] }}>
-                <SongCard
-                  song={song}
-                />
-              </Paper>
-            </Grid>
-          ))}
-        </Grid>
-      </div>
+      <AppBar className={classes.navBarContainer} position='static' color='default' >
+        <Tabs value={currentTab} onChange={onTabChange}>
+          <Tab label='Search Songs' />
+          <Tab label='Create Playlist' />
+        </Tabs>
+      </AppBar>
+      <Container className={classes.appContentContainer}>
+        <Container className={classes.centerText}>
+          <Typography variant='h3'>
+            Melody Miners
+          </Typography>
+        </Container>
+        <TabPanel value={currentTab} index={0}>
+          <SearchSongs setSongs={setSongs} songs={songs} colors={originalColors} />
+        </TabPanel>
+        <TabPanel value={currentTab} index={1}>
+          <SongsList songs={songs} colors={originalColors} />
+        </TabPanel>
+      </Container>
     </Container>
   );
 }
 
 export default App;
+
+const useStyles = makeStyles((theme) => ({
+  appContainer: {
+    maxWidth: '98vw !important',
+    padding: '0 !important',
+    margin: '1vw !important',
+  },
+  navBarContainer: {
+    width: '100%',
+  },
+  appContentContainer: {
+    padding: theme.spacing(4),
+  },
+  centerText: {
+    textAlign: 'center',
+    marginBottom: theme.spacing(3),
+  },
+  searchBar: {
+    border: '2px solid black',
+    borderRadius: theme.spacing(1),
+  },
+  searchBarContainer: {
+    marginBottom: theme.spacing(3),
+    textAlign: 'center', // Center the search bar
+  },
+  songCount: {
+    textAlign: 'center', // Center the text
+    marginBottom: theme.spacing(2),
+  }
+}));

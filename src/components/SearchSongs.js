@@ -1,9 +1,10 @@
 import { React, useState } from 'react'
 import { Container } from '@material-ui/core'
 import SearchBar from "material-ui-search-bar"
+import SongsList from './SongsList'
 import axios from 'axios'
 
-function SearchSongs({setSongs}) {
+function SearchSongs({setSongs, songs, colors}) {
   const [searchValue, setSearchValue] = useState("")
   
   const onSearch = (search) => {
@@ -42,6 +43,7 @@ function SearchSongs({setSongs}) {
         onChange={(change) => onChange(change)}
         onRequestSearch={(searchTerm) => onSearch(searchTerm)}
       />
+      <SongsList songs={songs} colors={colors} />
     </Container>
   )
 }

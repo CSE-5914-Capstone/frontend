@@ -60,30 +60,25 @@ function App() {
   
   return (
     <Container className={classes.appContainer}>
-      <Container className={classes.centerText}>
-        <Typography variant='h3'>
-          Melody Miners
-        </Typography>
-      </Container>
-      <AppBar position='static' color='default'>
+      <AppBar className={classes.navBarContainer} position='static' color='default' >
         <Tabs value={currentTab} onChange={onTabChange}>
           <Tab label='Search Songs' />
           <Tab label='Create Playlist' />
         </Tabs>
       </AppBar>
-
-      {/** TODO Put actual components/screens so tabs change the view */}
-      <TabPanel value={currentTab} index={0}>
-        <SearchSongs setSongs={setSongs} songs={songs} colors={originalColors} />
-      </TabPanel>
-      <TabPanel value={currentTab} index={1}>
-        <SongsList songs={songs} colors={originalColors} />
-      </TabPanel>
-      {/* <Container>
-        <Typography variant="h4" gutterBottom>
-          Number of Songs: {songs.length}
-        </Typography>
-      </Container> */}
+      <Container className={classes.appContentContainer}>
+        <Container className={classes.centerText}>
+          <Typography variant='h3'>
+            Melody Miners
+          </Typography>
+        </Container>
+        <TabPanel value={currentTab} index={0}>
+          <SearchSongs setSongs={setSongs} songs={songs} colors={originalColors} />
+        </TabPanel>
+        <TabPanel value={currentTab} index={1}>
+          <SongsList songs={songs} colors={originalColors} />
+        </TabPanel>
+      </Container>
     </Container>
   );
 }
@@ -92,6 +87,14 @@ export default App;
 
 const useStyles = makeStyles((theme) => ({
   appContainer: {
+    maxWidth: '98vw !important',
+    padding: '0 !important',
+    margin: '1vw !important',
+  },
+  navBarContainer: {
+    width: '100%',
+  },
+  appContentContainer: {
     padding: theme.spacing(4),
   },
   centerText: {

@@ -1,10 +1,15 @@
 import { React } from 'react'
 import { Container, Grid, Paper, CircularProgress, makeStyles } from "@material-ui/core"
 
-import SongCard from '../SongCard'
+import SongCard from './SongCard'
 
-function SongsList({songs, colors}) {
+function getRandomColor() {
+  return "#" + Math.floor(Math.random()*16777215).toString(16);
+}
+
+function SongsList({songs, includeButton, setShowPlaylist, setPlaylistSong}) {
   const classes = useStyles()
+  const colors = Array(songs.length).fill().map(getRandomColor)
   
   // if (!songs || !colors) {
   //   return (
@@ -20,6 +25,9 @@ function SongsList({songs, colors}) {
             <Paper className={classes.songCard} style={{ backgroundColor: colors[index] }}>
               <SongCard
                 song={song}
+                button={includeButton}
+                setShowPlaylist = {setShowPlaylist}
+                setPlaylistSong = {setPlaylistSong}
               />
             </Paper>
           </Grid>

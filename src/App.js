@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React, { useState, useEffect } from 'react';
 import { Container, Typography, makeStyles, AppBar, Tabs, Tab, Slider } from '@material-ui/core';
 import axios from 'axios';
@@ -12,6 +13,12 @@ function getNextColor(index) {
 ];
   return colors[index % colors.length];
 }
+=======
+import React, { useState} from 'react';
+import { Container, Typography, makeStyles, AppBar, Tabs, Tab } from '@material-ui/core';
+import HomePage from './components/HomePage';
+import CreatePlaylist from './components/CreatePlaylist';
+>>>>>>> e94e8323d4149c90baf655239385539bd585f65d
 
 function TabPanel({ value, index, children }) {
   return (
@@ -25,6 +32,7 @@ function TabPanel({ value, index, children }) {
 
 function App() {
   const classes = useStyles();
+<<<<<<< HEAD
   const [songs, setSongs] = useState([]);
   const [originalColors, setOriginalColors] = useState([]);
   const [currentTab, setCurrentTab] = useState(0);
@@ -62,6 +70,10 @@ function App() {
       });
   };
 
+=======
+  const [currentTab, setCurrentTab] = useState(0)
+
+>>>>>>> e94e8323d4149c90baf655239385539bd585f65d
   const onTabChange = (event, newTab) => {
     setCurrentTab(newTab);
   };
@@ -78,7 +90,7 @@ function App() {
     <Container className={classes.appContainer}>
       <AppBar className={classes.navBarContainer} position='static' color='default' >
         <Tabs value={currentTab} onChange={onTabChange}>
-          <Tab label='Search Songs' />
+          <Tab label='Home' />
           <Tab label='Create Playlist' />
         </Tabs>
       </AppBar>
@@ -89,6 +101,7 @@ function App() {
           </Typography>
         </Container>
         <TabPanel value={currentTab} index={0}>
+<<<<<<< HEAD
           <div className={classes.sliderContainer}>
             <Typography id="song-slider" gutterBottom>
               Number of Songs to Display: {numberOfSongs}
@@ -104,9 +117,12 @@ function App() {
             />
           </div>
           <SearchSongs setSongs={setSongs} songs={songs} colors={originalColors} clearSearch={clearSearch} />
+=======
+          <HomePage></HomePage>
+>>>>>>> e94e8323d4149c90baf655239385539bd585f65d
         </TabPanel>
         <TabPanel value={currentTab} index={1}>
-          <SongsList songs={songs} colors={originalColors} />
+          <CreatePlaylist></CreatePlaylist>
         </TabPanel>
       </Container>
     </Container>

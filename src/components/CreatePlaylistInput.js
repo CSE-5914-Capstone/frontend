@@ -7,45 +7,36 @@ function CreatePlaylistInput() {
   const [sliderValue, setSliderValue] = useState('')
   const [periodCount, setPeriodCount] = useState(0)
   const [inputString, setInputString] = useState('')
-  
-  // TODO finish input sanitation - allow leading zero only for decimal < 1
-  
+    
   const handleInputChange = (event) => {
     event.preventDefault()
     let value = event.target.value
-    // console.log("value: ", value)
     if (value === '') {
       setSliderValue(value)
-    } else if (!isNaN(value) && value.length <= 3) {
+    } else if (!isNaN(value) && value.length <= 3 && !(value.length > 2 && value.startsWith("."))) {
       let valueNum = parseFloat(value, 10)
-      // console.log("valueNum: ", valueNum)
       if (valueNum >= 0 && valueNum <= 10) {
         setSliderValue(valueNum)
       }
+    } else {
+      setInputString(inputString.substring(0, inputString.length - 1))
     }
   }
 
   const handleInputkeyPress = (event) => {
-    // console.log("sliderValue: ", sliderValue)
-    // console.log("event.key: ", event.key)
     if ((isNaN(event.key) && event.key !== "Backspace" && event.key !== "." ) ||
         (event.target.value.includes("0") && event.key === "0")) {
       event.preventDefault()
-    } else if (event.target.value === "0") {
-      setSliderValue("")
     } else if (event.key === ".") {
-      // console.log("event.key === '.'")
-      // console.log("periodCount: ", periodCount)
       if (periodCount > 0) {
         event.preventDefault()
       } else {
         setPeriodCount(periodCount + 1)
         setInputString(inputString.concat(event.key))
       }
+    } else if (inputString === "0") {
+      setSliderValue("")
     } else if (event.key === "Backspace") {
-      // console.log("event.key === Backspace")
-      // console.log("periodCount: ", periodCount)
-      // console.log("inputString: ", inputString)
       if (inputString.endsWith(".")) {
         setPeriodCount(periodCount - 1)
       }

@@ -1,139 +1,79 @@
-import './App.css';
-import { Container, Typography, TextField, Grid } from '@material-ui/core';
-import SearchBar from "material-ui-search-bar"
-import axios from 'axios'
-import React, { useState } from 'react';
-import SongCard from './SongCard';
+import React, { useState} from 'react';
+import { Container, Typography, makeStyles, AppBar, Tabs, Tab } from '@material-ui/core';
+import HomePage from './components/HomePage';
+import CreatePlaylist from './components/CreatePlaylist';
 
-function generateRandomSong() {
-  // Function to generate a random song
-  const genres = ['Pop', 'Rock', 'Electronic', 'Hip-Hop', 'Country'];
-  const bpm = Math.floor(Math.random() * (180 - 80 + 1) + 80); // Random BPM between 80 and 180
-
-  return {
-    name: `Random Song ${Math.floor(Math.random() * 1000)}`,
-    artist: `Random Artist ${Math.floor(Math.random() * 1000)}`,
-    genre: genres[Math.floor(Math.random() * genres.length)],
-    bpm,
-  };
-}
-
-function getRandomColor() {
-  // Function to generate a random color
-  const letters = '0123456789ABCDEF';
-  let color = '#';
-  for (let i = 0; i < 6; i++) {
-    color += letters[Math.floor(Math.random() * 16)];
-  }
-  return color;
+function TabPanel({value, index, children}) {
+  return (
+    <Container role="tabpanel" hidden={value !== index} id={`tabpanel-${index}`}>
+      {value === index && (
+        children
+      )}
+    </Container>
+  )
 }
 
 function App() {
-  const [numSongs, setNumSongs] = useState(1); // Default number of songs to display
-  const [songs, setSongs] = useState(Array.from({ length: numSongs }, generateRandomSong));
-  const [songColors, setSongColors] = useState(Array.from({ length: numSongs }, () => getRandomColor()));
-  const [searchValue, setSearchValue] = useState("")
-  
-  const handleNumSongsChange = (event) => {
-    // Update the number of songs to display
-    const newNumSongs = parseInt(event.target.value, 10);
-    setNumSongs(newNumSongs);
+  const classes = useStyles();
+  const [currentTab, setCurrentTab] = useState(0)
 
-    // Generate a new list of random songs and colors based on the updated number
-    const newSongs = Array.from({ length: newNumSongs }, (_, index) => {
-      if (index < numSongs) {
-        return songs[index]; // Keep existing songs unchanged
-      } else {
-        return generateRandomSong(); // Generate new songs for added slots
-      }
-    });
-    const newSongColors = Array.from({ length: newNumSongs }, (_, index) => {
-      if (index < numSongs) {
-        return songColors[index]; // Keep existing colors unchanged
-      } else {
-        return getRandomColor(); // Generate new colors for added slots
-      }
-    });
-
-    setSongs(newSongs);
-    setSongColors(newSongColors);
-  };
-  
-  const onSearch = (search) => {
-    console.log(search)
-    let result = {}
-    axios.get("http://localhost:3000/playlist-from-song").then((response) => {
-      console.log(response.data)
-      let data = response.data
-      data.map((song) => {
-        if (song["track_name"].toLowerCase().includes(search.toLowerCase())) {
-          result = song
-        }
-      })
-      setSongs([{
-        name: result["track_name"],
-        artist: result["track_artist"],
-        genre: result["playlist_genre"],
-        bpm: result["tempo"]
-      }])
-      
-      console.log(result)
-      setSearchValue("")
-      return result
-    })
-  }
-
-  const onChange = (change) => {
-    console.log("onChange")
-    setSearchValue(change)
+  const onTabChange = (event, newTab) => {
+    setCurrentTab(newTab)
   }
   
   return (
-    <Container className='app-container'>
-      <Container className='center-text'>
-        <Typography variant='h3'>
-          Melody Miners
-        </Typography>
+    <Container className={classes.appContainer}>
+      <AppBar className={classes.navBarContainer} position='static' color='default' >
+        <Tabs value={currentTab} onChange={onTabChange}>
+          <Tab label='Home' />
+          <Tab label='Create Playlist' />
+        </Tabs>
+      </AppBar>
+      <Container className={classes.appContentContainer}>
+        <Container className={classes.centerText}>
+          <Typography variant='h3'>
+            Melody Miners
+          </Typography>
+        </Container>
+        <TabPanel value={currentTab} index={0}>
+          <HomePage></HomePage>
+        </TabPanel>
+        <TabPanel value={currentTab} index={1}>
+          <CreatePlaylist></CreatePlaylist>
+        </TabPanel>
       </Container>
-      <Container>
-        <SearchBar
-          value={searchValue}
-          onChange={(change) => onChange(change)}
-          onRequestSearch={(searchTerm) => onSearch(searchTerm)}
-        />
-      </Container>
-      <Container>
-        <Typography variant="h4" gutterBottom>
-          Number of Songs: {numSongs}
-        </Typography>
-      </Container>
-      <Container>
-        {/** Disabled b/c currently breaking app w/ search functionality */}
-        <TextField
-          disabled={true}
-          type="number"
-          value={numSongs}
-          onChange={handleNumSongsChange}
-          variant="outlined"
-          fullWidth
-          margin="normal"
-          inputProps={{ style: { fontSize: 20, textAlign: 'center' } }}
-        />
-      </Container>
-      <Container>
-        <Grid container spacing={2}>
-          {songs.map((song, index) => (
-            <Grid item xs={12} sm={6} md={4} key={index}>
-              <SongCard
-                song={song}
-                cardStyle={{ backgroundColor: songColors[index] }}
-              />
-            </Grid>
-          ))}
-        </Grid>
-      </Container>      
     </Container>
   );
 }
 
 export default App;
+
+const useStyles = makeStyles((theme) => ({
+  appContainer: {
+    maxWidth: '98vw !important',
+    padding: '0 !important',
+    margin: '1vw !important',
+  },
+  navBarContainer: {
+    width: '100%',
+  },
+  appContentContainer: {
+    padding: theme.spacing(4),
+  },
+  centerText: {
+    textAlign: 'center',
+    marginBottom: theme.spacing(3),
+  },
+  searchBar: {
+    border: '2px solid black',
+    borderRadius: theme.spacing(1),
+  },
+  searchBarContainer: {
+    marginBottom: theme.spacing(3),
+    textAlign: 'center', // Center the search bar
+  },
+  songCount: {
+    textAlign: 'center', // Center the text
+    marginBottom: theme.spacing(2),
+  }
+}));

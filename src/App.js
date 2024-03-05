@@ -4,6 +4,7 @@ import axios from 'axios';
 
 import SearchSongs from './components/SearchSongs';
 import SongsList from './components/SongsList';
+import CreatePlaylistInput from './components/CreatePlaylistInput';
 
 function getRandomColor() {
   return "#" + Math.floor(Math.random()*16777215).toString(16);
@@ -76,6 +77,7 @@ function App() {
           <SearchSongs setSongs={setSongs} songs={songs} colors={originalColors} />
         </TabPanel>
         <TabPanel value={currentTab} index={1}>
+          <CreatePlaylistInput />
           <SongsList songs={songs} colors={originalColors} />
         </TabPanel>
       </Container>

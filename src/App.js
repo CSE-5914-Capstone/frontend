@@ -3,6 +3,8 @@ import { Container, Typography, Grid, makeStyles, Paper } from '@material-ui/cor
 import SearchBar from "material-ui-search-bar";
 import axios from 'axios';
 import SongCard from './SongCard';
+// import RequestText from './components/RequestText';
+import GetData from './components/Api';
 
 const useStyles = makeStyles((theme) => ({
   appContainer: {
@@ -50,6 +52,7 @@ function App() {
   const [songs, setSongs] = useState([]);
   const [originalColors, setOriginalColors] = useState([]);
   const [searchValue, setSearchValue] = useState("");
+  const [songList, setSongList] = useState("")
 
   useEffect(() => {
     fetchData();
@@ -129,6 +132,7 @@ function App() {
             </Grid>
           ))}
         </Grid>
+      {/* <p>{GetData().then(res =>(this.setState(res)))}</p> */}
       </div>
     </Container>
   );

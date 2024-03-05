@@ -1,16 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Typography, makeStyles, AppBar, Tabs, Tab, Slider } from '@material-ui/core';
+import { Container, Typography, makeStyles, AppBar, Tabs, Tab, Paper, Grid, Button } from '@material-ui/core';
 import axios from 'axios';
 
-import SearchSongs from './components/SearchSongs';
-import SongsList from './components/SongsList';
+import SearchSongs from './SearchSongs';
+import SongsList from './SongsList';
 
-function getNextColor(index) {
-  const colors = [
-  'red', 'orange', 'yellow', 'greenyellow', 'green',
-  'teal', 'cyan', 'dodgerblue', 'blue', 'indigo', 'purple', 'violet'
-];
-  return colors[index % colors.length];
+function getRandomColor() {
+  return "#" + Math.floor(Math.random() * 16777215).toString(16);
 }
 
 function TabPanel({ value, index, children }) {
@@ -29,12 +25,10 @@ function App() {
   const [originalColors, setOriginalColors] = useState([]);
   const [currentTab, setCurrentTab] = useState(0);
   const [searchKey, setSearchKey] = useState('');
-  const [numberOfSongs, setNumberOfSongs] = useState(1);
-  const [maxSongs, setMaxSongs] = useState(0);
 
   useEffect(() => {
     fetchData();
-  }, [searchKey, numberOfSongs]);
+  }, [searchKey]);
 
   const fetchData = () => {
     axios.get(`http://localhost:3000/playlist-from-song?searchKey=${searchKey}`)
@@ -43,8 +37,7 @@ function App() {
         let searchResults = [];
 
         if (Array.isArray(data)) {
-          setMaxSongs(data.length);
-          data.slice(0, numberOfSongs).forEach((song, index) => {
+          data.forEach((song) => {
             searchResults.push({
               name: song["track_name"],
               artist: song["track_artist"],
@@ -55,7 +48,7 @@ function App() {
         }
 
         setSongs(searchResults);
-        setOriginalColors(Array(searchResults.length).fill().map((_, index) => getNextColor(index)));
+        setOriginalColors(Array(searchResults.length).fill().map(getRandomColor));
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
@@ -68,10 +61,6 @@ function App() {
 
   const clearSearch = () => {
     setSearchKey('');
-  };
-
-  const handleSliderChange = (event, newValue) => {
-    setNumberOfSongs(newValue);
   };
 
   return (
@@ -89,23 +78,10 @@ function App() {
           </Typography>
         </Container>
         <TabPanel value={currentTab} index={0}>
-          <div className={classes.sliderContainer}>
-            <Typography id="song-slider" gutterBottom>
-              Number of Songs to Display: {numberOfSongs}
-            </Typography>
-            <Slider
-              value={numberOfSongs}
-              onChange={handleSliderChange}
-              aria-labelledby="song-slider"
-              step={1}
-              marks
-              min={1}
-              max={maxSongs}
-            />
-          </div>
           <SearchSongs setSongs={setSongs} songs={songs} colors={originalColors} clearSearch={clearSearch} />
         </TabPanel>
         <TabPanel value={currentTab} index={1}>
+          {/* Modified SongsList component */}
           <SongsList songs={songs} colors={originalColors} />
         </TabPanel>
       </Container>
@@ -129,10 +105,36 @@ const useStyles = makeStyles((theme) => ({
     textAlign: 'center',
     marginBottom: theme.spacing(3),
   },
-  sliderContainer: {
-    width: '50%',
-    margin: 'auto',
-    marginTop: theme.spacing(2),
+  searchBar: {
+    border: '2px solid black',
+    borderRadius: theme.spacing(1),
+  },
+  searchBarContainer: {
+    marginBottom: theme.spacing(3),
+    textAlign: 'center',
+  },
+  songCount: {
+    textAlign: 'center',
+    marginBottom: theme.spacing(2),
+  },
+  songCardContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+  },
+  songCard: {
+    width: 300,
+    height: 400,
+    margin: theme.spacing(2),
+    padding: theme.spacing(2),
+    marginBottom: 0,
+    marginRight: 0,
+    border: '4px solid black',
+    borderRadius: theme.spacing(1),
+    boxShadow: '8px 8px 8px rgba(0, 0, 0, 0.1), -8px -8px 8px rgba(0, 0, 0, 0.1)',
+  },
+  clearButton: {
+    cursor: 'pointer',
+    color: theme.palette.text.primary,
   },
 }));
 

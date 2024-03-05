@@ -12,22 +12,19 @@ function Playlist({songName}){
     
     const fetchData = () => {
         //songName will be passed in as a parameter here
-        axios.get("http://localhost:3000/playlist-from-song")
+        // axios.get("http://127.0.0.1:5000/query?trackname=I%20Don%27t%20Care%20(with%20Justin%20Bieber)%20-%20Loud%20Luxury%20Remix")
+        axios.get("http://127.0.0.1:5000/query?trackname=" + encodeURI(songName))
         .then((response) => {
-            let data = response.data;
+            let data = response.data.playlist;
             let searchResults = [];
-
-            if (Array.isArray(data)) {
-                data.forEach((song) => {
-                searchResults.push({
-                    name: song["track_name"],
-                    artist: song["track_artist"],
-                    genre: song["playlist_genre"],
-                    bpm: Math.round(song["tempo"]),
-                });
-                });
-            }
-
+            data.forEach((song) => {
+            searchResults.push({
+                name: song,
+                artist: "",
+                genre: "",
+                bpm: 0,
+            });
+            });
             setSongs(searchResults);
         })
         .catch((error) => {

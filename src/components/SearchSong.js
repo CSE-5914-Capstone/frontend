@@ -21,6 +21,7 @@ function SearchSong({ setSpotifySearch, setShowSpotifySongs, setShowPlaylist }) 
         maxWidth: 800,
         margin: "0 auto",
         padding: "0 20px",
+        marginBottom: 20, // Add margin to the bottom
       }}
       onSubmit={(e) => {
         e.preventDefault();

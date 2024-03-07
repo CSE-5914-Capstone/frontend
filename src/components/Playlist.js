@@ -1,38 +1,42 @@
 import axios from 'axios';
+import React, { useState, useEffect } from 'react';
 import SongsList from './SongsList';
-import React, {useState, useEffect} from 'react';
 
-
-function Playlist({songName}){
+function Playlist({ songName, includeButton, setShowPlaylist, setPlaylistSong }) {
     const [songs, setSongs] = useState([]);
 
     useEffect(() => {
-        fetchData();
-    }, []); 
-    
+        if (songName) {
+            fetchData();
+        }
+    }, [songName]);
+
     const fetchData = () => {
-        //songName will be passed in as a parameter here
-        // axios.get("http://127.0.0.1:5000/query?trackname=I%20Don%27t%20Care%20(with%20Justin%20Bieber)%20-%20Loud%20Luxury%20Remix")
         axios.get("http://127.0.0.1:5000/query?trackname=" + encodeURI(songName))
-        .then((response) => {
-            let data = response.data.playlist;
-            let searchResults = [];
-            data.forEach((song) => {
-            searchResults.push({
-                name: song,
-                artist: "",
-                genre: "",
-                bpm: 0,
+            .then((response) => {
+                const data = response.data.playlist;
+                const searchResults = data.map((song) => ({
+                    name: song,
+                    artist: "",
+                    genre: "",
+                    bpm: 0,
+                    albumImage: ""
+                }));
+                setSongs(searchResults);
+            })
+            .catch((error) => {
+                console.error("Error fetching data:", error);
             });
-            });
-            setSongs(searchResults);
-        })
-        .catch((error) => {
-            console.error("Error fetching data:", error);
-        });
     };
 
-    return(<SongsList songs={songs} />)
+    return (
+        <SongsList
+            songs={songs}
+            includeButton={includeButton}
+            setShowPlaylist={setShowPlaylist}
+            setPlaylistSong={setPlaylistSong}
+        />
+    );
 }
 
 export default Playlist;

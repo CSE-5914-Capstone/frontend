@@ -2,13 +2,13 @@ import React, { useState } from "react";
 import SearchSong from "./SearchSong";
 import SpotifySongs from "./SpotifySongs";
 import Playlist from "./Playlist";
-import SelectedSearch from "./SelectedSearch"; // Importing the new component
+import SelectedSearch from "./SelectedSearch";
 
 function CreatePlaylist() {
   const [spotifySearch, setSpotifySearch] = useState("");
   const [showSpotifySongs, setShowSpotifySongs] = useState(false);
   const [showPlaylist, setShowPlaylist] = useState(false);
-  const [playlistSong, setPlaylistSong] = useState("");
+  const [selectedSong, setSelectedSong] = useState(null);
 
   return (
     <>
@@ -21,11 +21,13 @@ function CreatePlaylist() {
         <SpotifySongs
           spotifySong={spotifySearch}
           setShowPlaylist={setShowPlaylist}
-          setPlaylistSong={setPlaylistSong}
+          setSelectedSong={setSelectedSong}
         />
       )}
-      {showPlaylist && <SelectedSearch songName={playlistSong} />}
-      {showPlaylist && <Playlist songName={playlistSong} />}
+      {showPlaylist && selectedSong && (
+        <SelectedSearch song={selectedSong} />
+      )}
+      {showPlaylist && <Playlist songName={selectedSong.name} />}
     </>
   );
 }

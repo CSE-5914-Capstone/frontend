@@ -1,10 +1,11 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
+import { Button } from '@material-ui/core';
 import SongsList from './SongsList';
 
 const CLIENT_ID = "bec6eb2bc39d4a23bb8cec0dc497b5d2";
 const CLIENT_SECRET = "d7ccc524fb7841dab9263d46e7ccfc2a";
 
-function SpotifySongs({ spotifySong, setShowPlaylist, setPlaylistSong }) {
+function SpotifySongs({ spotifySong, setShowPlaylist, setSelectedSong }) {
     const [songs, setSongs] = useState([]);
     const [accessToken, setAccessToken] = useState("");
 
@@ -42,14 +43,20 @@ function SpotifySongs({ spotifySong, setShowPlaylist, setPlaylistSong }) {
                 };
                 const response = await fetch(`https://api.spotify.com/v1/search?q=${spotifySong}&type=track`, trackParameters);
                 const data = await response.json();
-                console.log(data)
-                const searchResults = data.tracks.items.map(item => ({
-                    name: item.name,
-                    artist: item.artists.map(artist => artist.name).join(' '),
-                    genre: "", // You might want to fetch genre and BPM as well
-                    bpm: 0,
-                }));
-                setSongs(searchResults);
+                const searchResults = data.tracks.items.map(async (item) => {
+                    const albumResponse = await fetch(item.album.href, { headers: { 'Authorization': 'Bearer ' + accessToken } });
+                    const albumData = await albumResponse.json();
+                    return {
+                        name: item.name,
+                        artist: item.artists.map(artist => artist.name).join(' '),
+                        genre: "",
+                        bpm: 0,
+                        albumImage: albumData.images[0].url
+                    };
+                });
+                Promise.all(searchResults).then((results) => {
+                    setSongs(results);
+                });
             } catch (error) {
                 console.error('Error fetching songs:', error);
             }
@@ -57,12 +64,12 @@ function SpotifySongs({ spotifySong, setShowPlaylist, setPlaylistSong }) {
         fetchSongs();
     }, [accessToken, spotifySong]);
 
-    // Memoize the songs list
-    const memoizedSongs = useMemo(() => songs, [songs]);
-
-    return (
-        <SongsList songs={memoizedSongs} includeButton={true} setShowPlaylist={setShowPlaylist} setPlaylistSong={setPlaylistSong} />
-    );
+    return <SongsList 
+        songs={songs} 
+        includeButton={true} 
+        setShowPlaylist={setShowPlaylist} 
+        setSelectedSong={setSelectedSong}
+    />;
 }
 
 export default SpotifySongs;

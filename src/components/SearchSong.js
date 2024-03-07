@@ -1,51 +1,37 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import Button from '@mui/material/Button';
 import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
-import SearchIcon from "@mui/icons-material/Search";
+import SongsList from "./SongsList";
+import axios from 'axios';
 
-function SearchSong({ setSpotifySearch, setShowSpotifySongs, setShowPlaylist }) {
-  const [searchQuery, setSearchQuery] = useState("");
+function SearchSong ({setShowSpotifySongs}) {
+  const [songs, setSongs] = useState([]);
+  const [searchInput, setSearchInput] = useState("");
 
-  const handleSearch = () => {
-    setSpotifySearch(searchQuery);
-    setShowSpotifySongs(true);
-    setShowPlaylist(false);
-  };
-
-  return (
-    <form
-      style={{
-        display: "flex",
-        alignItems: "center",
-        width: "100%",
-        maxWidth: 800,
-        margin: "0 auto",
-        padding: "0 20px",
-      }}
-      onSubmit={(e) => {
-        e.preventDefault();
-        handleSearch();
-      }}
-    >
+  return(
+    <>
+    <form>
       <TextField
         id="search-bar"
+        className="text"
         variant="outlined"
         placeholder="Search for Song"
         size="small"
-        value={searchQuery}
-        onChange={(e) => setSearchQuery(e.target.value)}
-        style={{ flexGrow: 1, marginRight: 10 }}
-        fullWidth
+        sx={{
+          width: 350
+        }}
       />
       <Button
-        variant="contained"
-        onClick={handleSearch}
-        startIcon={<SearchIcon />}
+        variant = "contained"
+        onClick={() => {
+          setShowSpotifySongs(true)
+        }}
       >
         Search
       </Button>
     </form>
-  );
+    </>
+  )
 }
 
-export default SearchSong;
+export default SearchSong

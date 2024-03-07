@@ -1,41 +1,68 @@
-import axios from 'axios';
+import React, { useState, useEffect, useMemo } from 'react';
 import SongsList from './SongsList';
-import React, {useState, useEffect} from 'react';
 
+const CLIENT_ID = "bec6eb2bc39d4a23bb8cec0dc497b5d2";
+const CLIENT_SECRET = "d7ccc524fb7841dab9263d46e7ccfc2a";
 
-function SpotifySongs({setShowPlaylist, setPlaylistSong}){
+function SpotifySongs({ spotifySong, setShowPlaylist, setPlaylistSong }) {
     const [songs, setSongs] = useState([]);
+    const [accessToken, setAccessToken] = useState("");
 
     useEffect(() => {
-        fetchData();
-    }, []); 
-    
-    const fetchData = () => {
-        //songName will be passed in as a parameter here
-        axios.get("http://localhost:3000/playlist-from-song")
-        .then((response) => {
-            let data = response.data;
-            let searchResults = [];
-
-            if (Array.isArray(data)) {
-                data.forEach((song) => {
-                searchResults.push({
-                    name: song["track_name"],
-                    artist: song["track_artist"],
-                    genre: song["playlist_genre"],
-                    bpm: Math.round(song["tempo"]),
-                });
-                });
+        const fetchAccessToken = async () => {
+            try {
+                const authParameters = {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: 'grant_type=client_credentials&client_id=' + CLIENT_ID + "&client_secret=" + CLIENT_SECRET
+                };
+                const result = await fetch('https://accounts.spotify.com/api/token', authParameters);
+                const data = await result.json();
+                setAccessToken(data.access_token);
+            } catch (error) {
+                console.error('Error fetching access token:', error);
             }
+        };
+        fetchAccessToken();
+    }, []);
 
-            setSongs(searchResults);
-        })
-        .catch((error) => {
-            console.error("Error fetching data:", error);
-        });
-    };
+    useEffect(() => {
+        if (!accessToken) return;
 
-    return(<SongsList songs={songs} includeButton={true} setShowPlaylist = {setShowPlaylist} setPlaylistSong = {setPlaylistSong}/>)
+        const fetchSongs = async () => {
+            try {
+                const trackParameters = {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + accessToken
+                    },
+                };
+                const response = await fetch(`https://api.spotify.com/v1/search?q=${spotifySong}&type=track`, trackParameters);
+                const data = await response.json();
+                console.log(data)
+                const searchResults = data.tracks.items.map(item => ({
+                    name: item.name,
+                    artist: item.artists.map(artist => artist.name).join(' '),
+                    genre: "", // You might want to fetch genre and BPM as well
+                    bpm: 0,
+                }));
+                setSongs(searchResults);
+            } catch (error) {
+                console.error('Error fetching songs:', error);
+            }
+        };
+        fetchSongs();
+    }, [accessToken, spotifySong]);
+
+    // Memoize the songs list
+    const memoizedSongs = useMemo(() => songs, [songs]);
+
+    return (
+        <SongsList songs={memoizedSongs} includeButton={true} setShowPlaylist={setShowPlaylist} setPlaylistSong={setPlaylistSong} />
+    );
 }
 
 export default SpotifySongs;

@@ -1,12 +1,9 @@
 import React, { useState, useEffect } from "react";
 import Button from '@mui/material/Button';
 import TextField from "@mui/material/TextField";
-import SongsList from "./SongsList";
-import axios from 'axios';
 
-function SearchSong ({setShowSpotifySongs}) {
-  const [songs, setSongs] = useState([]);
-  const [searchInput, setSearchInput] = useState("");
+function SearchSong ({setSpotifySearch, setShowSpotifySongs, setShowPlaylist}) {
+  const [searchQuery, setSearchQuery] = useState("")
 
   return(
     <>
@@ -20,11 +17,16 @@ function SearchSong ({setShowSpotifySongs}) {
         sx={{
           width: 350
         }}
+        onInput={(e) => {
+          setSearchQuery(e.target.value);
+        }}
       />
       <Button
         variant = "contained"
-        onClick={() => {
+        onClick={(event) => {
+          setSpotifySearch(searchQuery)
           setShowSpotifySongs(true)
+          setShowPlaylist(false)
         }}
       >
         Search

@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
-import { Container, makeStyles, AppBar, Tabs, Tab } from '@material-ui/core';
+import React, { useState} from 'react';
+import { Container, Typography, makeStyles, AppBar, Tabs, Tab } from '@material-ui/core';
 import HomePage from './components/HomePage';
 import CreatePlaylist from './components/CreatePlaylist';
-import Logo from './components/Logo'; // Import your logo component here
 
-function TabPanel({ value, index, children }) {
+function TabPanel({value, index, children}) {
   return (
     <Container role="tabpanel" hidden={value !== index} id={`tabpanel-${index}`}>
       {value === index && (
@@ -32,7 +31,9 @@ function App() {
       </AppBar>
       <Container className={classes.appContentContainer}>
         <Container className={classes.centerText}>
-          <Logo /> {/* Render your logo component here */}
+          <Typography variant='h3'>
+            Melody Miners
+          </Typography>
         </Container>
         <TabPanel value={currentTab} index={0}>
           <HomePage></HomePage>

@@ -1,7 +1,8 @@
-import React, { useState} from 'react';
-import { Container, Typography, makeStyles, AppBar, Tabs, Tab } from '@material-ui/core';
+import React, { useState } from 'react';
+import { Container, makeStyles, AppBar, Tabs, Tab } from '@material-ui/core';
 import HomePage from './components/HomePage';
 import CreatePlaylist from './components/CreatePlaylist';
+import Logo from './components/Logo'; // Import your logo component here
 
 function TabPanel({ value, index, children }) {
   return (

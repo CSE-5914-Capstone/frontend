@@ -1,41 +1,42 @@
 import axios from 'axios';
+import React, { useState, useEffect } from 'react';
 import SongsList from './SongsList';
-import React, {useState, useEffect} from 'react';
 
-
-function Playlist({songName}){
+function Playlist({ songName, includeButton, setShowPlaylist, setPlaylistSong }) {
     const [songs, setSongs] = useState([]);
 
     useEffect(() => {
-        fetchData();
-    }, []); 
-    
+        if (songName) {
+            fetchData();
+        }
+    }, [songName]);
+
     const fetchData = () => {
-        //songName will be passed in as a parameter here
-        axios.get("http://localhost:3000/playlist-from-song")
-        .then((response) => {
-            let data = response.data;
-            let searchResults = [];
-
-            if (Array.isArray(data)) {
-                data.forEach((song) => {
-                searchResults.push({
-                    name: song["track_name"],
-                    artist: song["track_artist"],
-                    genre: song["playlist_genre"],
-                    bpm: Math.round(song["tempo"]),
-                });
-                });
-            }
-
-            setSongs(searchResults);
-        })
-        .catch((error) => {
-            console.error("Error fetching data:", error);
-        });
+        axios.get("http://127.0.0.1:5000/query?trackname=" + encodeURI(songName))
+            .then((response) => {
+                const data = response.data.playlist;
+                const searchResults = data.map((song) => ({
+                    name: song,
+                    artist: "",
+                    genre: "",
+                    bpm: 0,
+                    albumImage: ""
+                }));
+                setSongs(searchResults);
+            })
+            .catch((error) => {
+                console.error("Error fetching data:", error);
+            });
     };
 
-    return(<SongsList songs={songs} />)
+    return (
+        <SongsList
+            songs={songs}
+            includeButton={includeButton}
+            setShowPlaylist={setShowPlaylist}
+            setPlaylistSong={setPlaylistSong}
+        />
+    );
 }
 
 export default Playlist;

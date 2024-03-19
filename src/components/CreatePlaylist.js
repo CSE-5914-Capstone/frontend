@@ -1,19 +1,35 @@
+import React, { useState } from "react";
 import SearchSong from "./SearchSong";
 import SpotifySongs from "./SpotifySongs";
 import Playlist from "./Playlist";
-import SongCard from "./SongCard";
-import { useState } from "react";
+import SelectedSearch from "./SelectedSearch";
 
-function CreatePlaylist(){
-    const [showSpotifySongs, setShowSpotifySongs] = useState(false);
-    const [showPlaylist, setShowPlaylist] = useState(false)
-    const [playlistSong, setPlaylistSong] = useState("")
-    return(<>
-        <SearchSong setShowSpotifySongs = {setShowSpotifySongs} />
-        {showSpotifySongs && !showPlaylist && <SpotifySongs setShowPlaylist = {setShowPlaylist} setPlaylistSong = {setPlaylistSong} />}
-        {showPlaylist && <h1>Selected Song: {playlistSong}</h1>}
-        {showPlaylist && <Playlist songName = {playlistSong}/>}
-    </>)
+function CreatePlaylist() {
+  const [spotifySearch, setSpotifySearch] = useState("");
+  const [showSpotifySongs, setShowSpotifySongs] = useState(false);
+  const [showPlaylist, setShowPlaylist] = useState(false);
+  const [selectedSong, setSelectedSong] = useState(null);
+
+  return (
+    <>
+      <SearchSong
+        setSpotifySearch={setSpotifySearch}
+        setShowSpotifySongs={setShowSpotifySongs}
+        setShowPlaylist={setShowPlaylist}
+      />
+      {showSpotifySongs && !showPlaylist && (
+        <SpotifySongs
+          spotifySong={spotifySearch}
+          setShowPlaylist={setShowPlaylist}
+          setSelectedSong={setSelectedSong}
+        />
+      )}
+      {showPlaylist && selectedSong && (
+        <SelectedSearch song={selectedSong} />
+      )}
+      {showPlaylist && <Playlist songName={selectedSong.name} />}
+    </>
+  );
 }
 
-export default CreatePlaylist
+export default CreatePlaylist;

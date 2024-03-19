@@ -1,24 +1,7 @@
-<<<<<<< HEAD
-import React, { useState, useEffect } from 'react';
-import { Container, Typography, makeStyles, AppBar, Tabs, Tab, Slider } from '@material-ui/core';
-import axios from 'axios';
-
-import SearchSongs from './components/SearchSongs';
-import SongsList from './components/SongsList';
-
-function getNextColor(index) {
-  const colors = [
-  'red', 'orange', 'yellow', 'greenyellow', 'green',
-  'teal', 'cyan', 'dodgerblue', 'blue', 'indigo', 'purple', 'violet'
-];
-  return colors[index % colors.length];
-}
-=======
 import React, { useState} from 'react';
 import { Container, Typography, makeStyles, AppBar, Tabs, Tab } from '@material-ui/core';
 import HomePage from './components/HomePage';
 import CreatePlaylist from './components/CreatePlaylist';
->>>>>>> e94e8323d4149c90baf655239385539bd585f65d
 
 function TabPanel({ value, index, children }) {
   return (
@@ -32,7 +15,6 @@ function TabPanel({ value, index, children }) {
 
 function App() {
   const classes = useStyles();
-<<<<<<< HEAD
   const [songs, setSongs] = useState([]);
   const [originalColors, setOriginalColors] = useState([]);
   const [currentTab, setCurrentTab] = useState(0);
@@ -70,10 +52,6 @@ function App() {
       });
   };
 
-=======
-  const [currentTab, setCurrentTab] = useState(0)
-
->>>>>>> e94e8323d4149c90baf655239385539bd585f65d
   const onTabChange = (event, newTab) => {
     setCurrentTab(newTab);
   };
@@ -96,12 +74,9 @@ function App() {
       </AppBar>
       <Container className={classes.appContentContainer}>
         <Container className={classes.centerText}>
-          <Typography variant='h3'>
-            Melody Miners
-          </Typography>
+          <Logo /> {/* Render your logo component here */}
         </Container>
         <TabPanel value={currentTab} index={0}>
-<<<<<<< HEAD
           <div className={classes.sliderContainer}>
             <Typography id="song-slider" gutterBottom>
               Number of Songs to Display: {numberOfSongs}
@@ -117,9 +92,6 @@ function App() {
             />
           </div>
           <SearchSongs setSongs={setSongs} songs={songs} colors={originalColors} clearSearch={clearSearch} />
-=======
-          <HomePage></HomePage>
->>>>>>> e94e8323d4149c90baf655239385539bd585f65d
         </TabPanel>
         <TabPanel value={currentTab} index={1}>
           <CreatePlaylist></CreatePlaylist>
@@ -151,5 +123,3 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(2),
   },
 }));
-
-export default App;

@@ -14,7 +14,9 @@ function Playlist({ songName, includeButton, setShowPlaylist, setPlaylistSong })
     const fetchData = () => {
         axios.get("http://127.0.0.1:5000/query?trackname=" + encodeURI(songName))
             .then((response) => {
-                const data = response.data.playlist;
+                const data = response.data.Playlist;
+                console.log("response: ", response)
+                console.log("data", data)
                 const searchResults = data.map((song) => ({
                     name: song,
                     artist: "",

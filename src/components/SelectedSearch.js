@@ -1,6 +1,8 @@
 import React from 'react';
 import { Card, CardContent, CardMedia, Typography, makeStyles } from '@material-ui/core';
 
+//can add more selections besides just song
+
 const useStyles = makeStyles((theme) => ({
   card: {
     display: 'flex',

@@ -49,9 +49,6 @@ const SongCard = ({ song, includeButton, setShowPlaylist, setSelectedSong }) => 
         <Typography variant="body2" color="textSecondary" component="p" className={classes.text}>
           Artist: {song.artist}
         </Typography>
-        <Typography variant="body2" color="textSecondary" component="p" className={classes.text}>
-          Genre: {song.genre}
-        </Typography>
         <Typography variant="body2" color="textSecondary" component="p">
           BPM: {song.bpm}
         </Typography>

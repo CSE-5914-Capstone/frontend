@@ -1,16 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { Container, Typography, makeStyles, AppBar, Tabs, Tab } from '@material-ui/core';
-import axios from 'axios';
-
-import SearchSongs from './components/SearchSongs';
-import SongsList from './components/SongsList';
+import React, { useState } from 'react';
+import { Container, makeStyles, AppBar, Tabs, Tab } from '@material-ui/core';
+import HomePage from './components/HomePage';
+import CreatePlaylist from './components/CreatePlaylist';
+import Logo from './components/Logo'; // Import your logo component here
 import CreatePlaylistInput from './components/CreatePlaylistInput';
 
-function getRandomColor() {
-  return "#" + Math.floor(Math.random()*16777215).toString(16);
-}
-
-function TabPanel({value, index, children}) {
+function TabPanel({ value, index, children }) {
   return (
     <Container role="tabpanel" hidden={value !== index} id={`tabpanel-${index}`}>
       {value === index && (
@@ -22,38 +17,7 @@ function TabPanel({value, index, children}) {
 
 function App() {
   const classes = useStyles();
-  const [songs, setSongs] = useState([]);
-  const [originalColors, setOriginalColors] = useState([]);
   const [currentTab, setCurrentTab] = useState(0)
-
-  useEffect(() => {
-    fetchData();
-  }, []); 
-
-  const fetchData = () => {
-    axios.get("http://localhost:3000/playlist-from-song")
-      .then((response) => {
-        let data = response.data;
-        let searchResults = [];
-
-        if (Array.isArray(data)) {
-          data.forEach((song) => {
-            searchResults.push({
-              name: song["track_name"],
-              artist: song["track_artist"],
-              genre: song["playlist_genre"],
-              bpm: Math.round(song["tempo"]),
-            });
-          });
-        }
-
-        setSongs(searchResults);
-        setOriginalColors(Array(searchResults.length).fill().map(getRandomColor));
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
-  };
 
   const onTabChange = (event, newTab) => {
     setCurrentTab(newTab)
@@ -63,22 +27,20 @@ function App() {
     <Container className={classes.appContainer}>
       <AppBar className={classes.navBarContainer} position='static' color='default' >
         <Tabs value={currentTab} onChange={onTabChange}>
-          <Tab label='Search Songs' />
+          <Tab label='Home' />
           <Tab label='Create Playlist' />
         </Tabs>
       </AppBar>
       <Container className={classes.appContentContainer}>
         <Container className={classes.centerText}>
-          <Typography variant='h3'>
-            Melody Miners
-          </Typography>
+          <Logo /> {/* Render your logo component here */}
         </Container>
         <TabPanel value={currentTab} index={0}>
-          <SearchSongs setSongs={setSongs} songs={songs} colors={originalColors} />
+          <HomePage></HomePage>
         </TabPanel>
         <TabPanel value={currentTab} index={1}>
-          <CreatePlaylistInput />
-          <SongsList songs={songs} colors={originalColors} />
+          <CreatePlaylist></CreatePlaylist>
+          {/* <SongsList songs={songs} colors={originalColors} /> */}
         </TabPanel>
       </Container>
     </Container>

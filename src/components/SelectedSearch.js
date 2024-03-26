@@ -37,9 +37,6 @@ const SelectedSearch = ({ song }) => {
             Artist: {song.artist}
           </Typography>
           <Typography variant="subtitle1" color="textSecondary">
-            Genre: {song.genre}
-          </Typography>
-          <Typography variant="subtitle1" color="textSecondary">
             BPM: {song.bpm}
           </Typography>
         </CardContent>

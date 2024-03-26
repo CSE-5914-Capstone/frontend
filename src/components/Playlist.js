@@ -15,14 +15,12 @@ function Playlist({ songName, includeButton, setShowPlaylist, setPlaylistSong })
         axios.get("http://127.0.0.1:5000/query?trackname=" + encodeURI(songName))
             .then((response) => {
                 const data = response.data.Playlist;
-                console.log("response: ", response)
-                console.log("data", data)
+                console.log("DATA IS: ", data)
                 const searchResults = data.map((song) => ({
-                    name: song,
-                    artist: "",
-                    genre: "",
-                    bpm: 0,
-                    albumImage: ""
+                    name: song.track_name,
+                    artist: song.artists[0],
+                    bpm: song.tempo,
+                    albumImage: song.spotify_link
                 }));
                 setSongs(searchResults);
             })

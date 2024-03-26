@@ -49,7 +49,6 @@ function SpotifySongs({ spotifySong, setShowPlaylist, setSelectedSong }) {
                     return {
                         name: item.name,
                         artist: item.artists.map(artist => artist.name).join(' '),
-                        genre: "",
                         bpm: 0,
                         albumImage: albumData.images[0].url
                     };

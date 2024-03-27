@@ -1,9 +1,10 @@
-import { Container, Slider, Input } from '@material-ui/core'
+import { Container, Slider, Input, makeStyles, Typography } from '@material-ui/core'
 import { React, useState } from 'react'
 
 // TODO Add input for playlist creation query parameters
 // User slider with input all from 0-10, allowing for one decimal place
-function CreatePlaylistInput() {
+function CreatePlaylistInput({title}) {
+  const classes = useStyles();
   const [sliderValue, setSliderValue] = useState('')
   const [periodCount, setPeriodCount] = useState(0)
   const [inputString, setInputString] = useState('')
@@ -48,28 +49,39 @@ function CreatePlaylistInput() {
   
   return (
     <Container>
-      <Slider
-        value={typeof sliderValue === 'number' ? sliderValue : 0}
-        onChange={(event, newValue) => setSliderValue(newValue)}
-        min={0}
-        max={10}
-        step={0.1}
-      />
-      <Input
-        value={sliderValue}
-        onChange={handleInputChange}
-        onKeyDown={handleInputkeyPress}
-        pattern={'[0-9]*'}
-        itemType='number'
-        inputProps={{
-          min: 0,
-          max: 10,
-          step: 0.1,
-          type: 'number',
-        }}
-      />
+      <Container>
+        <Typography>{title}</Typography>
+      </Container>
+      <Container className={classes.sliderInput}>
+        <Slider
+          value={typeof sliderValue === 'number' ? sliderValue : 0}
+          onChange={(event, newValue) => setSliderValue(newValue)}
+          min={0}
+          max={10}
+          step={0.1}
+        />
+        <Input
+          value={sliderValue}
+          onChange={handleInputChange}
+          onKeyDown={handleInputkeyPress}
+          pattern={'[0-9]*'}
+          itemType='number'
+          inputProps={{
+            min: 0,
+            max: 10,
+            step: 0.1,
+            type: 'number',
+          }}
+        />
+      </Container>
     </Container>
   )
 }
 
 export default CreatePlaylistInput
+
+const useStyles = makeStyles((theme) => ({
+  sliderInput: {
+    display: 'flex',
+  },
+}));

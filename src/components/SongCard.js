@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button, Card, CardContent, CardActions, Typography, makeStyles } from '@material-ui/core';
+import CreatePlaylistPopup from './CreatePlaylistPopup';
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -34,6 +35,12 @@ const useStyles = makeStyles((theme) => ({
 
 const SongCard = ({ song, includeButton, setShowPlaylist, setSelectedSong }) => {
   const classes = useStyles();
+  const [popupOpen, setPopupOpen] = useState(false)
+
+  const onSubmit = () => {
+    setShowPlaylist(true);
+    setSelectedSong(song);
+  }
 
   return (
     <Card className={classes.card}>
@@ -58,14 +65,20 @@ const SongCard = ({ song, includeButton, setShowPlaylist, setSelectedSong }) => 
           <Button
             variant="outlined"
             onClick={() => {
-              setShowPlaylist(true);
-              setSelectedSong(song);
+              // setShowPlaylist(true);
+              // setSelectedSong(song);
+              setPopupOpen(true)
             }}
           >
             Create Playlist
           </Button>
         </CardActions>
       )}
+      <CreatePlaylistPopup
+        open={popupOpen}
+        setOpen={setPopupOpen}
+        onSubmit={onSubmit}
+      />
     </Card>
   );
 };

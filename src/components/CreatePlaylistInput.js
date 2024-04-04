@@ -54,6 +54,7 @@ function CreatePlaylistInput({title}) {
       </Container>
       <Container className={classes.sliderInput}>
         <Slider
+          className={classes.slider}
           value={typeof sliderValue === 'number' ? sliderValue : 0}
           onChange={(event, newValue) => setSliderValue(newValue)}
           min={0}
@@ -61,6 +62,7 @@ function CreatePlaylistInput({title}) {
           step={0.1}
         />
         <Input
+          id={title.toLowerCase()}
           value={sliderValue}
           onChange={handleInputChange}
           onKeyDown={handleInputkeyPress}
@@ -83,5 +85,8 @@ export default CreatePlaylistInput
 const useStyles = makeStyles((theme) => ({
   sliderInput: {
     display: 'flex',
+  },
+  slider: {
+    marginEnd: '2vw',
   },
 }));

@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button, Card, CardContent, CardActions, Typography, makeStyles } from '@material-ui/core';
+import CreatePlaylistPopup from './CreatePlaylistPopup';
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -34,6 +35,48 @@ const useStyles = makeStyles((theme) => ({
 
 const SongCard = ({ song, includeButton, setShowPlaylist, setSelectedSong }) => {
   const classes = useStyles();
+  const [popupOpen, setPopupOpen] = useState(false)
+  // const [dancebility, setDanceability] = useState<null | Number>(null)
+  // const [energy, setEnergy] = useState<null | Number>(null)
+  // const [loudness, setLoudness] = useState<null | Number>(null)
+  // const [liveness, setLiveness] = useState<null | Number>(null)
+  // const [valence, setValence] = useState<null | Number>(null)
+  // const [tempo, setTempo] = useState<null | Number>(null)
+  const userParamsLabels = ["Danceability", "Energy", "Loudness", "Liveness", "Valence", "Tempo"]
+
+  const onSubmit = (event) => {
+    let danceability = null, energy = null, loudness = null, liveness = null, valence = null, tempo = null
+    console.log("Submitted")
+    // console.log(event)
+    event.target.forEach((input) => {
+      if (input.defaultValue !== "") {
+        switch(input.id) {
+          case userParamsLabels[0].toLowerCase():
+            danceability = input.defaultValue
+            break
+          case userParamsLabels[1].toLowerCase():
+            energy = input.defaultValue
+            break
+          case userParamsLabels[2].toLowerCase():
+            loudness = input.defaultValue
+            break
+          case userParamsLabels[3].toLowerCase():
+            liveness = input.defaultValue
+            break
+          case userParamsLabels[4].toLowerCase():
+            valence = input.defaultValue
+            break
+          case userParamsLabels[5].toLowerCase():
+            tempo = input.default
+            break
+          default:
+            break
+        }
+      }
+    })
+    setShowPlaylist(true);
+    setSelectedSong(song);
+  }
 
   return (
     <Card className={classes.card}>
@@ -58,14 +101,21 @@ const SongCard = ({ song, includeButton, setShowPlaylist, setSelectedSong }) => 
           <Button
             variant="outlined"
             onClick={() => {
-              setShowPlaylist(true);
-              setSelectedSong(song);
+              // setShowPlaylist(true);
+              // setSelectedSong(song);
+              setPopupOpen(true)
             }}
           >
             Create Playlist
           </Button>
         </CardActions>
       )}
+      <CreatePlaylistPopup
+        open={popupOpen}
+        setOpen={setPopupOpen}
+        onSubmit={onSubmit}
+        userParams={userParamsLabels}
+      />
     </Card>
   );
 };

@@ -36,19 +36,12 @@ const useStyles = makeStyles((theme) => ({
 const SongCard = ({ song, includeButton, setShowPlaylist, setSelectedSong }) => {
   const classes = useStyles();
   const [popupOpen, setPopupOpen] = useState(false)
-  // const [dancebility, setDanceability] = useState<null | Number>(null)
-  // const [energy, setEnergy] = useState<null | Number>(null)
-  // const [loudness, setLoudness] = useState<null | Number>(null)
-  // const [liveness, setLiveness] = useState<null | Number>(null)
-  // const [valence, setValence] = useState<null | Number>(null)
-  // const [tempo, setTempo] = useState<null | Number>(null)
   const userParamsLabels = ["Danceability", "Energy", "Loudness", "Liveness", "Valence", "Tempo"]
 
   const onSubmit = (event) => {
     let danceability = null, energy = null, loudness = null, liveness = null, valence = null, tempo = null
-    console.log("Submitted")
-    // console.log(event)
-    event.target.forEach((input) => {
+    for (let i = 0; i < 12; i++) {
+      let input = event.target[i]
       if (input.defaultValue !== "") {
         switch(input.id) {
           case userParamsLabels[0].toLowerCase():
@@ -73,7 +66,7 @@ const SongCard = ({ song, includeButton, setShowPlaylist, setSelectedSong }) => 
             break
         }
       }
-    })
+    }
     setShowPlaylist(true);
     setSelectedSong(song);
   }

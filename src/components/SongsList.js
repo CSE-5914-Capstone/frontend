@@ -2,7 +2,7 @@ import React from 'react';
 import { Grid } from '@material-ui/core';
 import SongCard from './SongCard';
 
-const SongsList = ({ songs, includeButton, setShowPlaylist, setSelectedSong }) => {
+const SongsList = ({ songs, includeButton, setShowPlaylist, setSelectedSong, setDanceability, setEnergy, setLoudness, setLiveness, setValence, setTempo }) => {
   return (
     <Grid container spacing={2}>
       {songs.map((song, index) => (

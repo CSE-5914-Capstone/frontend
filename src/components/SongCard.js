@@ -33,47 +33,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const SongCard = ({ song, includeButton, setShowPlaylist, setSelectedSong }) => {
+const SongCard = ({ song, includeButton, setShowPlaylist, setSelectedSong, setDanceability, setEnergy, setLoudness, setLiveness, setValence, setTempo }) => {
   const classes = useStyles();
   const [popupOpen, setPopupOpen] = useState(false)
-  // const [dancebility, setDanceability] = useState<null | Number>(null)
-  // const [energy, setEnergy] = useState<null | Number>(null)
-  // const [loudness, setLoudness] = useState<null | Number>(null)
-  // const [liveness, setLiveness] = useState<null | Number>(null)
-  // const [valence, setValence] = useState<null | Number>(null)
-  // const [tempo, setTempo] = useState<null | Number>(null)
   const userParamsLabels = ["Danceability", "Energy", "Loudness", "Liveness", "Valence", "Tempo"]
+  const paramSetFunctions = [setDanceability, setEnergy, setLoudness, setLiveness, setValence, setTempo]
 
   const onSubmit = (event) => {
-    let danceability = null, energy = null, loudness = null, liveness = null, valence = null, tempo = null
-    console.log("Submitted")
-    // console.log(event)
-    event.target.forEach((input) => {
-      if (input.defaultValue !== "") {
-        switch(input.id) {
-          case userParamsLabels[0].toLowerCase():
-            danceability = input.defaultValue
-            break
-          case userParamsLabels[1].toLowerCase():
-            energy = input.defaultValue
-            break
-          case userParamsLabels[2].toLowerCase():
-            loudness = input.defaultValue
-            break
-          case userParamsLabels[3].toLowerCase():
-            liveness = input.defaultValue
-            break
-          case userParamsLabels[4].toLowerCase():
-            valence = input.defaultValue
-            break
-          case userParamsLabels[5].toLowerCase():
-            tempo = input.default
-            break
-          default:
-            break
-        }
-      }
-    })
     setShowPlaylist(true);
     setSelectedSong(song);
   }
@@ -115,6 +81,7 @@ const SongCard = ({ song, includeButton, setShowPlaylist, setSelectedSong }) => 
         setOpen={setPopupOpen}
         onSubmit={onSubmit}
         userParams={userParamsLabels}
+        setFunctions={paramSetFunctions}
       />
     </Card>
   );

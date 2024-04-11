@@ -5,7 +5,7 @@ import SongsList from './SongsList';
 const CLIENT_ID = "bec6eb2bc39d4a23bb8cec0dc497b5d2";
 const CLIENT_SECRET = "d7ccc524fb7841dab9263d46e7ccfc2a";
 
-function SpotifySongs({ spotifySong, setShowPlaylist, setSelectedSong }) {
+function SpotifySongs({ spotifySong, setShowPlaylist, setSelectedSong, setDanceability, setEnergy, setLoudness, setLiveness, setValence, setTempo }) {
     const [songs, setSongs] = useState([]);
     const [accessToken, setAccessToken] = useState("");
 
@@ -68,6 +68,12 @@ function SpotifySongs({ spotifySong, setShowPlaylist, setSelectedSong }) {
         includeButton={true} 
         setShowPlaylist={setShowPlaylist} 
         setSelectedSong={setSelectedSong}
+        setDanceability={setDanceability}
+        setEnergy={setEnergy}
+        setLoudness={setLoudness}
+        setLiveness={setLiveness}
+        setValence={setValence}
+        setTempo={setTempo}
     />;
 }
 

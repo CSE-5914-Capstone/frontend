@@ -2,7 +2,8 @@ import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import SongsList from './SongsList';
 
-function Playlist({ songName, danceability, loudness, valence, energy, liveness, tempo, includeButton, setShowPlaylist, setPlaylistSong }) {
+// danceability, loudness, valence, energy, liveness, tempo
+function PlaylistParam({ songName, danceability, loudness, valence, energy, liveness, tempo, includeButton, setShowPlaylist, setPlaylistSong }) {
     const [songs, setSongs] = useState([]);
 
     useEffect(() => {
@@ -12,7 +13,7 @@ function Playlist({ songName, danceability, loudness, valence, energy, liveness,
     }, [songName]);
 
     const constructUrl = () => {
-        let url = "http://127.0.0.1:5000/query?trackname=" + encodeURI(songName)
+        url = "http://127.0.0.1:5000/query?trackname=" + encodeURI(songName)
         if(danceability != null){
             url += "?danceability="+danceability
         }
@@ -31,12 +32,13 @@ function Playlist({ songName, danceability, loudness, valence, energy, liveness,
         if(tempo != null){
             url += "?tempo="+tempo
         }
-        return url
+        
     }
 
+
     const fetchData = () => {
-        let url = constructUrl()
-        console.log(url)
+        url = constructUrl();
+        console.log(url);
         axios.get(url)
             .then((response) => {
                 const data = response.data.Playlist;

@@ -9,6 +9,12 @@ function CreatePlaylist() {
   const [showSpotifySongs, setShowSpotifySongs] = useState(false);
   const [showPlaylist, setShowPlaylist] = useState(false);
   const [selectedSong, setSelectedSong] = useState(null);
+  const [dancebility, setDanceability] = useState(null)
+  const [energy, setEnergy] = useState(null)
+  const [loudness, setLoudness] = useState(null)
+  const [liveness, setLiveness] = useState(null)
+  const [valence, setValence] = useState(null)
+  const [tempo, setTempo] = useState(null)
 
   return (
     <>
@@ -22,12 +28,28 @@ function CreatePlaylist() {
           spotifySong={spotifySearch}
           setShowPlaylist={setShowPlaylist}
           setSelectedSong={setSelectedSong}
+          setDanceability={setDanceability}
+          setEnergy={setEnergy}
+          setLoudness={setLoudness}
+          setLiveness={setLiveness}
+          setValence={setValence}
+          setTempo={setTempo}
         />
       )}
       {showPlaylist && selectedSong && (
         <SelectedSearch song={selectedSong} />
       )}
-      {showPlaylist && <Playlist songName={selectedSong.name} />}
+      {showPlaylist && 
+        <Playlist 
+          songName={selectedSong.name}
+          danceability={dancebility}
+          energy={energy}
+          loudness={loudness}
+          liveness={liveness}
+          valence={valence}
+          tempo={tempo}
+        />
+      }
     </>
   );
 }

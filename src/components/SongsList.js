@@ -12,6 +12,12 @@ const SongsList = ({ songs, includeButton, setShowPlaylist, setSelectedSong, set
             includeButton={includeButton}
             setShowPlaylist={setShowPlaylist}
             setSelectedSong={setSelectedSong}
+            setDanceability={setDanceability}
+            setEnergy={setEnergy}
+            setLoudness={setLoudness}
+            setLiveness={setLiveness}
+            setValence={setValence}
+            setTempo={setTempo}
           />
         </Grid>
       ))}

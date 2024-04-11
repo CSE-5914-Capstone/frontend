@@ -28,7 +28,12 @@ function CreatePlaylist() {
           spotifySong={spotifySearch}
           setShowPlaylist={setShowPlaylist}
           setSelectedSong={setSelectedSong}
-          /** TODO Pass set functions here */
+          setDanceability={setDanceability}
+          setEnergy={setEnergy}
+          setLoudness={setLoudness}
+          setLiveness={setLiveness}
+          setValence={setValence}
+          setTempo={setTempo}
         />
       )}
       {showPlaylist && selectedSong && (

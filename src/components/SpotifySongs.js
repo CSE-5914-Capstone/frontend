@@ -63,15 +63,17 @@ function SpotifySongs({ spotifySong, setShowPlaylist, setSelectedSong, setDancea
         fetchSongs();
     }, [accessToken, spotifySong]);
 
-    /**
-     * TODO need to pass set functions for parameters into SongsList
-     */
     return <SongsList 
         songs={songs} 
         includeButton={true} 
         setShowPlaylist={setShowPlaylist} 
         setSelectedSong={setSelectedSong}
-        
+        setDanceability={setDanceability}
+        setEnergy={setEnergy}
+        setLoudness={setLoudness}
+        setLiveness={setLiveness}
+        setValence={setValence}
+        setTempo={setTempo}
     />;
 }
 

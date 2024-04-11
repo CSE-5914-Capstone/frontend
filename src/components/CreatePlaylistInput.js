@@ -1,9 +1,7 @@
 import { Container, Slider, Input, makeStyles, Typography } from '@material-ui/core'
 import { React, useState } from 'react'
 
-// TODO Add input for playlist creation query parameters
-// User slider with input all from 0-10, allowing for one decimal place
-function CreatePlaylistInput({title}) {
+function CreatePlaylistInput({title, setParam}) {
   const classes = useStyles();
   const [sliderValue, setSliderValue] = useState('')
   const [periodCount, setPeriodCount] = useState(0)
@@ -18,10 +16,17 @@ function CreatePlaylistInput({title}) {
       let valueNum = parseFloat(value, 10)
       if (valueNum >= 0 && valueNum <= 10) {
         setSliderValue(valueNum)
+        console.log(setParam)
+        setParam(valueNum)
       }
     } else {
       setInputString(inputString.substring(0, inputString.length - 1))
     }
+  }
+
+  const handleSliderChange = (event, newValue) => {
+    setSliderValue(newValue)
+    setParam(newValue)
   }
 
   const handleInputkeyPress = (event) => {
@@ -56,7 +61,7 @@ function CreatePlaylistInput({title}) {
         <Slider
           className={classes.slider}
           value={typeof sliderValue === 'number' ? sliderValue : 0}
-          onChange={(event, newValue) => setSliderValue(newValue)}
+          onChange={handleSliderChange}
           min={0}
           max={10}
           step={0.1}

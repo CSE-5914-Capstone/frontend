@@ -37,10 +37,19 @@ function CreatePlaylist() {
         />
       )}
       {showPlaylist && selectedSong && (
-        <SelectedSearch song={selectedSong} />
+        <SelectedSearch
+          song = {selectedSong}
+          danceability={dancebility}
+          energy={energy}
+          loudness={loudness}
+          liveness={liveness}
+          valence={valence}
+          tempo={tempo}
+        />
       )}
       {showPlaylist && 
-        <Playlist 
+        <Playlist
+          songTrackId={selectedSong.track_id}
           songName={selectedSong.name}
           danceability={dancebility}
           energy={energy}

@@ -1,48 +1,108 @@
-import React from 'react';
-import { Card, CardContent, CardMedia, Typography, makeStyles } from '@material-ui/core';
+import React from "react";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import Typography from "@mui/material/Typography";
+import Grid from "@mui/material/Grid";
 
-//can add more selections besides just song
+function SelectedSearch({ song, danceability, energy, loudness, liveness, valence, tempo }) {
+  const spotifyUrl = `https://open.spotify.com/embed/track/${song.track_id}`;
 
-const useStyles = makeStyles((theme) => ({
-  card: {
-    display: 'flex',
-    marginBottom: theme.spacing(2),
-  },
-  content: {
-    flex: '1 0 auto',
-  },
-  cover: {
-    width: 150,
-    height: 150,
-    objectFit: 'cover',
-  },
-}));
-
-const SelectedSearch = ({ song }) => {
-  const classes = useStyles();
+  const isAnyParameterSelected = danceability !== null || energy !== null || loudness !== null || liveness !== null || valence !== null || tempo !== null;
 
   return (
-    <Card className={classes.card}>
-      <CardMedia
-        className={classes.cover}
-        image={song.albumImage}
-        title={song.name}
-      />
-      <div className={classes.content}>
+    <div style={{ marginBottom: "20px" }}>
+      <Card variant="outlined">
         <CardContent>
-          <Typography component="h5" variant="h5">
-            {song.name}
+          <Typography variant="h5" component="div">
+            Selected Song
           </Typography>
-          <Typography variant="subtitle1" color="textSecondary">
-            Artist: {song.artist}
-          </Typography>
-          <Typography variant="subtitle1" color="textSecondary">
-            BPM: {song.bpm}
-          </Typography>
+          <iframe
+            src={spotifyUrl}
+            width="300"
+            height="80"
+            frameBorder="0"
+            allowtransparency="true"
+            allow="encrypted-media"
+          ></iframe>
+          {isAnyParameterSelected && (
+            <>
+              <Typography variant="h6" component="div" style={{ marginTop: "20px", marginBottom: "10px" }}>
+                Selected Parameters
+              </Typography>
+              <Grid container spacing={2}>
+                {danceability !== null && (
+                  <Grid item xs={6} sm={4} md={3} lg={2}>
+                    <Card>
+                      <CardContent>
+                        <Typography variant="body1" component="div">
+                          <strong>Danceability:</strong> {danceability}
+                        </Typography>
+                      </CardContent>
+                    </Card>
+                  </Grid>
+                )}
+                {energy !== null && (
+                  <Grid item xs={6} sm={4} md={3} lg={2}>
+                    <Card>
+                      <CardContent>
+                        <Typography variant="body1" component="div">
+                          <strong>Energy:</strong> {energy}
+                        </Typography>
+                      </CardContent>
+                    </Card>
+                  </Grid>
+                )}
+                {loudness !== null && (
+                  <Grid item xs={6} sm={4} md={3} lg={2}>
+                    <Card>
+                      <CardContent>
+                        <Typography variant="body1" component="div">
+                          <strong>Loudness:</strong> {loudness}
+                        </Typography>
+                      </CardContent>
+                    </Card>
+                  </Grid>
+                )}
+                {liveness !== null && (
+                  <Grid item xs={6} sm={4} md={3} lg={2}>
+                    <Card>
+                      <CardContent>
+                        <Typography variant="body1" component="div">
+                          <strong>Liveness:</strong> {liveness}
+                        </Typography>
+                      </CardContent>
+                    </Card>
+                  </Grid>
+                )}
+                {valence !== null && (
+                  <Grid item xs={6} sm={4} md={3} lg={2}>
+                    <Card>
+                      <CardContent>
+                        <Typography variant="body1" component="div">
+                          <strong>Valence:</strong> {valence}
+                        </Typography>
+                      </CardContent>
+                    </Card>
+                  </Grid>
+                )}
+                {tempo !== null && (
+                  <Grid item xs={6} sm={4} md={3} lg={2}>
+                    <Card>
+                      <CardContent>
+                        <Typography variant="body1" component="div">
+                          <strong>Tempo:</strong> {tempo}
+                        </Typography>
+                      </CardContent>
+                    </Card>
+                  </Grid>
+                )}
+              </Grid>
+            </>
+          )}
         </CardContent>
-      </div>
-    </Card>
+      </Card>
+    </div>
   );
-};
+}
 
 export default SelectedSearch;

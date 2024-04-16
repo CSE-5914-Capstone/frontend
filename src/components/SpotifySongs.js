@@ -50,7 +50,8 @@ function SpotifySongs({ spotifySong, setShowPlaylist, setSelectedSong, setDancea
                         name: item.name,
                         artist: item.artists.map(artist => artist.name).join(' '),
                         bpm: 0,
-                        albumImage: albumData.images[0].url
+                        albumImage: albumData.images[0].url,
+                        track_id: item.id
                     };
                 });
                 Promise.all(searchResults).then((results) => {

@@ -2,6 +2,8 @@ import React, { useState} from 'react';
 import { Container, Typography, makeStyles, AppBar, Tabs, Tab } from '@material-ui/core';
 import HomePage from './components/HomePage';
 import CreatePlaylist from './components/CreatePlaylist';
+// import Logo from './components/Logo'; // Import your logo component here
+import CreatePlaylistInput from './components/CreatePlaylistInput';
 
 function TabPanel({value, index, children}) {
   return (
@@ -40,6 +42,7 @@ function App() {
         </TabPanel>
         <TabPanel value={currentTab} index={1}>
           <CreatePlaylist></CreatePlaylist>
+          {/* <SongsList songs={songs} colors={originalColors} /> */}
         </TabPanel>
       </Container>
     </Container>

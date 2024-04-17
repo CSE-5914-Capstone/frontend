@@ -1,38 +1,80 @@
 import axios from 'axios';
+import React, { useState, useEffect } from 'react';
 import SongsList from './SongsList';
-import React, {useState, useEffect} from 'react';
 
-
-function Playlist({songName}){
+function Playlist({ songTrackId, songName, danceability, loudness, valence, energy, liveness, tempo, includeButton, setShowPlaylist, setPlaylistSong }) {
     const [songs, setSongs] = useState([]);
 
     useEffect(() => {
-        fetchData();
-    }, []); 
-    
-    const fetchData = () => {
-        //songName will be passed in as a parameter here
-        // axios.get("http://127.0.0.1:5000/query?trackname=I%20Don%27t%20Care%20(with%20Justin%20Bieber)%20-%20Loud%20Luxury%20Remix")
-        axios.get("http://127.0.0.1:5000/query?trackname=" + encodeURI(songName))
-        .then((response) => {
-            let data = response.data.playlist;
-            let searchResults = [];
-            data.forEach((song) => {
-            searchResults.push({
-                name: song,
-                artist: "",
-                genre: "",
-                bpm: 0,
-            });
-            });
-            setSongs(searchResults);
-        })
-        .catch((error) => {
-            console.error("Error fetching data:", error);
-        });
+        if (songTrackId) {
+            fetchData();
+        }
+    }, [songTrackId, songName, danceability, loudness, valence, energy, liveness, tempo]);
+
+    const constructUrl = () => {
+        let url = "http://127.0.0.1:5000/query?";
+        const queryParams = [];
+        
+        if (songTrackId != null) {
+            queryParams.push("track_id=" + encodeURIComponent(songTrackId));
+        }
+
+        if (songName != null) {
+            queryParams.push("track_name=" + encodeURIComponent(songName));
+        }
+
+        if (danceability != null) {
+            queryParams.push("danceability=" + danceability);
+        }
+        if (loudness != null) {
+            queryParams.push("loudness=" + loudness);
+        }
+        if (valence != null) {
+            queryParams.push("valence=" + valence);
+        }
+        if (energy != null) {
+            queryParams.push("energy=" + energy);
+        }
+        if (liveness != null) {
+            queryParams.push("liveness=" + liveness);
+        }
+        if (tempo != null) {
+            queryParams.push("tempo=" + tempo);
+        }
+
+        url += queryParams.join('&');
+        return url;
     };
 
-    return(<SongsList songs={songs} />)
+    const fetchData = () => {
+        const url = constructUrl();
+        console.log(url);
+        axios.get(url)
+            .then((response) => {
+                const data = response.data.Playlist;
+                console.log("DATA IS: ", data);
+                const searchResults = data.map((song) => ({
+                    name: song.track_name,
+                    artist: song.artists[0],
+                    bpm: song.tempo,
+                    albumImage: song.spotify_link,
+                    track_id: song.track_id
+                }));
+                setSongs(searchResults);
+            })
+            .catch((error) => {
+                console.error("Error fetching data:", error);
+            });
+    };
+
+    return (
+        <SongsList
+            songs={songs}
+            includeButton={includeButton}
+            setShowPlaylist={setShowPlaylist}
+            setPlaylistSong={setPlaylistSong}
+        />
+    );
 }
 
 export default Playlist;

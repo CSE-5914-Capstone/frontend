@@ -40,6 +40,11 @@ function HomePage() {
       <Typography variant="body1" style={{ marginTop: '10px' }}>
       Simply search for a song, and instantly receive a curated playlist of similar tracks, tailored to your musical taste!
       </Typography>
+      <Typography variant="body1" style={{ marginTop: '10px', paddingInline: '50px', textAlign: 'center' }}>
+        When creating a playlist, you will have the option to add additional options to create the playlist based on.
+        Options left blank will not be included, but if an option is selected with a value, even if it is 0, it will
+        be included as an extra option in the playlist creation with that chosen value.
+      </Typography>
     </div>
   );
 }
